@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="board.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+<div id="tridiv">
+  <div class="scene" style="-webkit-transform:rotateX(-53deg) rotateY(0deg); -moz-transform:rotateX(-53deg) rotateY(0deg); -ms-transform:rotateX(-53deg) rotateY(0deg); transform:rotateX(-53deg) rotateY(0deg); ">
+    <div class="shape cuboid-1 cub-1">
+      <div class="face ft hidden">
+        <div class="photon-shader" style="background-color: rgba(0, 0, 0, 0.114);"></div>
+      </div>
+      <div class="face bk">
+        <div class="photon-shader" style="background-color: rgba(0, 0, 0, 0.486);"></div>
+      </div>
+      <div class="face rt">
+        <div class="photon-shader" style="background-color: rgba(0, 0, 0, 0.114);"></div>
+      </div>
+      <div class="face lt">
+        <div class="photon-shader" style="background-color: rgba(0, 0, 0, 0.114);"></div>
+      </div>
+      <div class="face bm">
+        <div class="photon-shader" style="background-color: rgba(0, 0, 0, 0.114);"></div>
+      </div>
+      <div class="face tp">
+        <div class="board-stack grid grid-cols-1 photon-shader z-0">
+             <div class="opponent-row-layout">
+                <aside class="board-owner-badge" id="board-owner-badge" aria-label="Contexto atual: Bazar">
+                  <img src="img/cover.jpg" alt="">
+                  <span class="board-owner-label">BAZAR</span>
+                </aside>
+                <div class="board-row board-row-opponent" data-board-row="opponent" aria-label="Ofertas do bazar">
+                  <div class="board-row-art" aria-hidden="true"></div>
+                  <div class="opponent-offers" id="opponent-offers" aria-live="polite"></div>
+                </div>
+                <button class="phase-next" id="phase-next" type="button" aria-label="Avançar para a próxima fase">
+                  <span aria-hidden="true">➜</span>
+                  <span>AVANÇAR</span>
+                </button>
+             </div>
+             <div class="battle-health opponent-health" id="opponent-health" role="meter" aria-label="Vida do adversário" aria-valuemin="0" aria-valuemax="20" aria-valuenow="20" hidden>
+                <div class="battle-health-fill" aria-hidden="true"></div>
+                <div class="battle-shield-fill" aria-hidden="true" hidden></div>
+                <span class="battle-health-value">20</span>
+                <span class="battle-health-effect" aria-hidden="true"></span>
+                <span class="battle-shield" hidden></span>
+             </div>
+             <div class="battle-health player-health" id="player-health" role="meter" aria-label="Vida do jogador" aria-valuemin="0" aria-valuemax="20" aria-valuenow="20">
+                <div class="battle-health-fill" aria-hidden="true"></div>
+                <div class="battle-shield-fill" aria-hidden="true" hidden></div>
+                <span class="battle-health-value">20</span>
+                <span class="battle-health-effect" aria-hidden="true"></span>
+                <span class="battle-shield" hidden></span>
+             </div>
+             <div class="board-row board-row-player grid grid-cols-4 gap-2 p-4 border" data-board-row="player" aria-label="Seu tabuleiro">
+                <div class="board-row-art" aria-hidden="true"></div>
+                <aside class="board-owner-badge board-player-badge" aria-label="Seu personagem: jogador">
+                  <img src="img/cover.jpg" alt="Ícone do jogador">
+                  <span class="board-owner-label">PLAYER</span>
+                </aside>
+                <div class="player-slot border rounded flex items-center justify-center" data-slot="1" aria-label="Slot inferior 1"><span>1</span></div>
+                <div class="player-slot border rounded flex items-center justify-center" data-slot="2" aria-label="Slot inferior 2"><span>2</span></div>
+                <div class="player-slot border rounded flex items-center justify-center" data-slot="3" aria-label="Slot inferior 3"><span>3</span></div>
+                <div class="player-slot border rounded flex items-center justify-center" data-slot="4" aria-label="Slot inferior 4"><span>4</span></div>
+             </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="card-hand" aria-label="Mão de cartas">
+    <article class="hand-card type-creature" data-kind="creature" data-level="1" data-cost="4" data-cooldown="4" data-damage="2" style="--card-index: 0; --card-angle: -19deg; --card-lift: 36px;">
+      <header class="card-header"><span>DRAGON WHELP</span><span class="card-cost">4</span></header>
+      <div class="card-art" aria-hidden="true"><img src="img/cover.jpg" alt=""></div>
+      <div class="card-info">
+        <div class="card-type">CREATURE</div>
+        <div class="card-level">LEVEL 1</div>
+        <div class="card-stats"><span class="card-damage">⚔ 2</span><span class="card-cooldown">⏱ 4s</span></div>
+        <p class="card-description">A fierce little dragon ready to join the fight.</p>
+      </div>
+    </article>
+    <article class="hand-card type-creature video-card" data-kind="creature" data-level="3" data-cost="7" data-cooldown="5" data-damage="4" style="--card-index: 1; --card-angle: -10deg; --card-lift: 12px;">
+      <div class="card-art" aria-hidden="true">
+        <video class="card-art-video" src="img/video-1.mp4" poster="img/cover-2.jpg" autoplay muted loop playsinline preload="metadata"></video>
+      </div>
+      <header class="card-header"><span>PHOENIX LORD</span><span class="card-cost">7</span></header>
+      <div class="card-info">
+        <div class="card-type">CREATURE</div>
+        <div class="card-level">LEVEL 3</div>
+        <div class="card-stats"><span class="card-damage">⚔ 4</span><span class="card-cooldown">⏱ 5s</span></div>
+        <p class="card-description">When destroyed, return to your hand and deal 3 damage to all enemies.</p>
+      </div>
+    </article>
+    <article class="hand-card type-spell" data-kind="spell" data-cost="3" data-cooldown="3" data-effect-type="healing" data-effect-value="4" style="--card-index: 2; --card-angle: 0deg; --card-lift: 0px;">
+      <header class="card-header"><span>HEALING RAIN</span><span class="card-cost">3</span></header>
+      <div class="card-art" aria-hidden="true"><img src="img/cover.jpg" alt=""></div>
+      <div class="card-info">
+        <div class="card-type">SPELL</div>
+        <div class="card-stats"><span class="card-cooldown">⏱ 3s</span></div>
+        <p class="card-description">Restore 4 health to all friendly creatures.</p>
+      </div>
+    </article>
+    <article class="hand-card type-creature" data-kind="creature" data-level="2" data-cost="5" data-cooldown="4" data-damage="3" style="--card-index: 3; --card-angle: 10deg; --card-lift: 12px;">
+      <header class="card-header"><span>MOONLIT MAGE</span><span class="card-cost">5</span></header>
+      <div class="card-art" aria-hidden="true"><img src="img/cover.jpg" alt=""></div>
+      <div class="card-info">
+        <div class="card-type">CREATURE</div>
+        <div class="card-level">LEVEL 2</div>
+        <div class="card-stats"><span class="card-damage">⚔ 3</span><span class="card-cooldown">⏱ 4s</span></div>
+        <p class="card-description">At the start of your turn, deal 1 damage to all enemies.</p>
+      </div>
+    </article>
+  </section>
+</div>
+<section class="dice-console" aria-label="Mini tabuleiro do dado">
+  <div class="mana-meter" id="mana-meter" role="meter" aria-label="Mana atual: 0 de 10" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0">
+    <div class="mana-pips" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <span class="mana-label">MANA</span>
+    <span class="mana-value" id="mana-value">0/10</span>
+  </div>
+  <div class="dice-stage">
+    <button class="dice-cube" id="roll-die" type="button" aria-label="Rolar dado de seis faces" aria-describedby="dice-result">
+      <span class="die-face die-face-top" data-value="1" aria-hidden="true"><span class="die-pips die-pips-1"><i class="die-pip"></i></span></span>
+      <span class="die-face die-face-front" data-value="2" aria-hidden="true"><span class="die-pips die-pips-2"><i class="die-pip"></i><i class="die-pip"></i></span></span>
+      <span class="die-face die-face-right" data-value="3" aria-hidden="true"><span class="die-pips die-pips-3"><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i></span></span>
+      <span class="die-face die-face-left" data-value="4" aria-hidden="true"><span class="die-pips die-pips-4"><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i></span></span>
+      <span class="die-face die-face-back" data-value="5" aria-hidden="true"><span class="die-pips die-pips-5"><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i></span></span>
+      <span class="die-face die-face-bottom" data-value="6" aria-hidden="true"><span class="die-pips die-pips-6"><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i><i class="die-pip"></i></span></span>
+    </button>
+  </div>
+  <output id="dice-result" class="sr-only" aria-live="polite">Resultado: 1</output>
+</section>
+<section class="battle-result" id="battle-result" role="dialog" aria-modal="true" aria-labelledby="battle-result-title" hidden>
+  <div class="battle-result-panel">
+    <p class="battle-result-eyebrow">BATALHA ENCERRADA</p>
+    <h2 id="battle-result-title"></h2>
+    <p class="battle-result-message" id="battle-result-message"></p>
+    <button class="battle-result-action" id="battle-result-action" type="button"></button>
+  </div>
+</section>
+<div class="card-modal" id="card-modal" role="dialog" aria-modal="true" aria-labelledby="modal-card-name" hidden>
+  <button class="card-modal-close" type="button" aria-label="Fechar detalhes da carta">&times;</button>
+  <div class="card-modal-content">
+    <div class="card-modal-art"></div>
+    <section class="card-modal-details">
+      <p class="card-modal-eyebrow">CARD DETAILS</p>
+      <h2 id="modal-card-name"></h2>
+      <p class="card-modal-type"></p>
+      <div class="card-modal-stats"></div>
+      <p class="card-modal-description"></p>
+    </section>
+  </div>
+</div>
+<script src="board.js"></script>
+</body>
+</html>
