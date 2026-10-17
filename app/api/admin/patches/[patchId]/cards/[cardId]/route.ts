@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAdminRequest, unauthorizedResponse } from "@/lib/admin-auth";
-import { isCardDefinition } from "@/lib/admin-cards";
+import { isCardDefinition, normalizeCardArt } from "@/lib/admin-cards";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
 
 export const runtime = "nodejs";
@@ -17,6 +17,7 @@ export async function PUT(
     if (!isCardDefinition(definition, cardId)) {
       return NextResponse.json({ error: "Os dados da carta são inválidos." }, { status: 400 });
     }
+    const normalizedDefinition = normalizeCardArt(definition);
 
     const supabase = getSupabaseAdmin();
     const { data: patch, error: patchError } = await supabase
@@ -31,7 +32,7 @@ export async function PUT(
 
     const { data, error } = await supabase
       .from("balance_patch_cards")
-      .update({ definition, enabled: definition.enabled !== false })
+      .update({ definition: normalizedDefinition, enabled: normalizedDefinition.enabled !== false })
       .eq("patch_id", patchId)
       .eq("card_id", cardId)
       .select("card_id")
