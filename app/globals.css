@@ -5758,7 +5758,8 @@ body.fullscreen-prompt-open {
   justify-content: flex-end;
 }
 
-.shop-card-art {
+.shop-card-art,
+.shop-card-photo {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -5767,14 +5768,38 @@ body.fullscreen-prompt-open {
   object-position: center 22%;
 }
 
+/* Fundo desfocado do vendedor (foto de fundo). */
+.shop-card-photo {
+  transform: scale(1.12);
+  filter: blur(7px) brightness(0.72) saturate(1.1);
+  z-index: 0;
+}
+
+/* Recorte do vendedor (cutout) por cima do fundo desfocado. */
+.shop-card-cutout {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  object-position: center bottom;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55));
+}
+
 .shop-card-grad {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: linear-gradient(180deg,
       rgba(4, 6, 12, 0.08) 0%,
       rgba(4, 6, 12, 0.04) 42%,
       rgba(4, 6, 12, 0.82) 80%,
       rgba(4, 6, 12, 0.96) 100%);
+  pointer-events: none;
 }
 
 /* Dica flutuante do vendedor: variação de .card-tip só com nome e descrição. */

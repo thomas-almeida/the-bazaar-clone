@@ -30,11 +30,11 @@ import PhaseIntro from "./PhaseIntro";
 import VersusModal from "./VersusModal";
 import TutorialOverlay from "./TutorialOverlay";
 
-const SHOP_META: Record<ShopCategory, { label: string; icon: string; cls: string; art: string; desc: string }> = {
-  dano: { label: "Jay Jay", icon: "⚔", cls: "shop-dano", art: "/boargame/img/loja-dano.jpg", desc: "Vende armas e criaturas que dão dano." },
-  cura: { label: "Yaga", icon: "✚", cls: "shop-cura", art: "/boargame/img/loja-cura.jpg", desc: "Vende provisões de cura." },
-  aceleracao: { label: "Billy", icon: "⚡", cls: "shop-haste", art: "/boargame/img/loja-aceleracao.jpg", desc: "Vende Feitiços de Aceleração." },
-  escudo: { label: "Donavan", icon: "⛨", cls: "shop-escudo", art: "/boargame/img/loja-escudo.jpg", desc: "Forja armaduras e escudos." },
+const SHOP_META: Record<ShopCategory, { label: string; icon: string; cls: string; art: string; cutout: string; desc: string }> = {
+  dano: { label: "Jay Jay", icon: "⚔", cls: "shop-dano", art: "/boargame/img/loja-dano.jpg", cutout: "/boargame/img/loja-dano.png", desc: "Vende armas e criaturas que dão dano." },
+  cura: { label: "Yaga", icon: "✚", cls: "shop-cura", art: "/boargame/img/loja-cura.jpg", cutout: "/boargame/img/loja-cura.png", desc: "Vende provisões de cura." },
+  aceleracao: { label: "Billy", icon: "⚡", cls: "shop-haste", art: "/boargame/img/loja-aceleracao.jpg", cutout: "/boargame/img/loja-aceleracao.png", desc: "Vende Feitiços de Aceleração." },
+  escudo: { label: "Donavan", icon: "⛨", cls: "shop-escudo", art: "/boargame/img/loja-escudo.jpg", cutout: "/boargame/img/loja-escudo.png", desc: "Forja armaduras e escudos." },
 };
 
 function ShopCard({ shop, index }: { shop: Shop; index: number }) {
@@ -59,7 +59,8 @@ function ShopCard({ shop, index }: { shop: Shop; index: number }) {
       }}
       onPointerLeave={() => closeTip()}
     >
-      <img className="shop-card-art" src={meta.art} alt="" />
+      <img className="shop-card-photo" src={meta.art} alt="" aria-hidden="true" />
+      <img className="shop-card-cutout" src={meta.cutout} alt="" aria-hidden="true" />
       <span className="shop-card-grad" aria-hidden="true" />
     </button>
   );
