@@ -5,14 +5,40 @@
 import { categoryOf } from "./catalog";
 import type { CardDef, ShopCategory } from "./types";
 
+export type MagePassive = "slot3" | "heal-adjacent" | "shield-maxhp" | "bleed-wakizashi";
+
+export const PASSIVE_INFO: Record<MagePassive, { label: string; desc: string }> = {
+  slot3: {
+    label: "IRA",
+    desc: "A carta no slot 3 ganha +5% de atributo e cooldown mais rápido. Jogar de SYDRA aumenta o dano de todas as cartas",
+  },
+  "heal-adjacent": {
+    label: "RESSONÂNCIA",
+    desc: "Cartas de cura lado a lado têm o efeito multiplicado por 1,2x. Jogar de AURORA aumenta a cura de todas as cartas.",
+  },
+  "shield-maxhp": {
+    label: "MURALHA",
+    desc: "Com 2+ itens de escudo na mão, sua vida máxima é dobrada. Jogar de EGBERT aumenta o escudo de todas as cartas.",
+  },
+  "bleed-wakizashi": {
+    label: "SANGRIA",
+    desc: "Com uma WAKIZASHI no tabuleiro, YAMATO faz o oponente sangrar — e o sangramento por segundo cresce ao longo da batalha.",
+  },
+};
+
 export interface Mage {
   id: string;
   name: string;
   theme: string;
   blurb: string;
   specialties: ShopCategory[];
+  passive: MagePassive;
   video: string; // vídeo usado nos feitiços do deck
   portrait: string; // rosto do mago (badge)
+  /** Recorte do personagem com fundo transparente (PNG), para o efeito pop-out. */
+  cutout?: string;
+  background: string; // vídeo de fundo do mago (menu/jogo e preview do modal)
+  music: string; // trilha do mago (toca no jogo e em preview no modal)
   accent: string;
 }
 
@@ -21,33 +47,59 @@ const IMG = "/boargame/img";
 export const MAGES: Mage[] = [
   {
     id: "neon",
-    name: "NEON",
-    theme: "Cyberpunk",
-    blurb: "Mago das ruas neon. Esmaga rápido com dano e aceleração.",
+    name: "SYDRA",
+    theme: "Cósmico",
+    blurb: "O cadáver vivo do rei de Mamon. Esmaga rápido com dano e aceleração.",
     specialties: ["dano", "aceleracao"],
+    passive: "slot3",
     video: `${IMG}/video-1.mp4`,
     portrait: `${IMG}/mago-1.jpg`,
-    accent: "#36e0ff",
+    cutout: `${IMG}/mago-1-no-bg.png`,
+    background: `${IMG}/bg-video-homescreen.mp4`,
+    music: `${IMG}/maggi-soundtrack-2.mp3`,
+    accent: "#d70c0c",
   },
   {
     id: "aurea",
-    name: "ÁUREA",
-    theme: "Medieval",
-    blurb: "Clériga de ordem antiga. Sustenta a batalha com cura e aceleração.",
+    name: "AURORA",
+    theme: "Cyberpunk",
+    blurb: "Princesa das Industrias K1LL. Sustenta a batalha com cura e aceleração.",
     specialties: ["cura", "aceleracao"],
+    passive: "heal-adjacent",
     video: `${IMG}/video-2.mp4`,
     portrait: `${IMG}/mago-2.jpg`,
-    accent: "#ffcf5a",
+    cutout: `${IMG}/mago-2-no-bg.png`,
+    background: `${IMG}/bg-video-homescreen-2.mp4`,
+    music: `${IMG}/maggi-soundtrack-3.mp3`,
+    accent: "#0648ff",
   },
   {
     id: "ferro",
-    name: "FERRO",
-    theme: "Velho Oeste",
-    blurb: "Pistoleiro blindado. Aguenta tudo com escudo e revida com dano.",
+    name: "EGBERT",
+    theme: "Medieval",
+    blurb: "Rei de Mamon. Usa a força do escudo e revida com dano.",
     specialties: ["escudo", "dano"],
-    video: `${IMG}/video-3.mp4`,
+    passive: "shield-maxhp",
+    video: `${IMG}/video-2.mp4`,
     portrait: `${IMG}/mago-3.jpg`,
+    cutout: `${IMG}/mago-4-no-bg.png`,
+    background: `${IMG}/ascii-magic-18.mp4`,
+    music: `${IMG}/menu-song.mp3`,
     accent: "#e8a15a",
+  },
+  {
+    id: "yamato",
+    name: "YAMATO",
+    theme: "Feudal",
+    blurb: "Espadachim das lâminas gêmeas. Com a WAKIZASHI em jogo, faz o inimigo sangrar sem parar.",
+    specialties: ["dano"],
+    passive: "bleed-wakizashi",
+    video: `${IMG}/video-1.mp4`,
+    portrait: `${IMG}/mago-5.jpg`,
+    cutout: `${IMG}/mago-5-no-bg.png`,
+    background: `${IMG}/ascii-magic-19.mp4`,
+    music: `${IMG}/maggi-soundtrack-2.mp3`,
+    accent: "#c01818",
   },
 ];
 
