@@ -230,15 +230,9 @@ describe("CSS: dica flutuante mantém a setinha", () => {
   });
 });
 
-describe("CSS: cursor único do app", () => {
-  it("declara a seta customizada em --app-cursor", () => {
-    expect(CSS).toMatch(/--app-cursor:\s*url\("\/cursors\/game-cursor-48\.png"\)/);
-  });
-
-  it("aplica o cursor a todos os elementos (!important)", () => {
-    expect(CSS).toMatch(
-      /\*,\s*\*::before,\s*\*::after\s*\{[^}]*cursor:\s*var\(--app-cursor\)\s*!important/,
-    );
+describe("CSS: cursor padrão do sistema", () => {
+  it("não declara mais o cursor customizado game-cursor", () => {
+    expect(CSS).not.toMatch(/game-cursor-48\.png/);
   });
 });
 
