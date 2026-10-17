@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { playEvent } from "@/lib/sfx";
 
 const DISMISS_KEY = "maggi-fullscreen-prompt-dismissed";
 
@@ -42,6 +43,7 @@ export default function FullscreenPrompt() {
     }
     setPending(true);
     setError("");
+    playEvent("ui:modal.fullscreen");
     try {
       await document.documentElement.requestFullscreen();
       setVisible(false);
@@ -53,6 +55,7 @@ export default function FullscreenPrompt() {
   };
 
   const dismissPermanently = () => {
+    playEvent("ui:modal.fullscreen");
     try {
       window.localStorage.setItem(DISMISS_KEY, "true");
       setVisible(false);

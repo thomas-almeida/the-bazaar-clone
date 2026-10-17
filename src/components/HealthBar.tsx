@@ -5,10 +5,19 @@
 // (.battle-health-effect) é controlado pelo motor de combate.
 
 import { useGame } from "@/lib/store";
+import { effectiveMaxHealth, shieldMaxActive } from "@/lib/passives";
 import type { Side } from "@/lib/types";
 
 export default function HealthBar({ side }: { side: Side }) {
-  const maxHealth = useGame((s) => s.config.maxHealth);
+  // O oponente usa `opponentMaxHealth` (que vem do snapshot da build real no
+  // PVP assíncrono), não o max do catálogo — senão a barra limitaria a vida
+  // dele em config.maxHealth. Ambos os lados incluem o ganho de cura em curso.
+  const maxHealth = useGame((s) =>
+    side === "player"
+      ? effectiveMaxHealth(s.playerMaxHealth, s.mage, s.hand, s.playerMaxHealthGain)
+      : s.opponentMaxHealth + s.opponentMaxHealthGain,
+  );
+  const maxDoubled = useGame((s) => side === "player" && shieldMaxActive(s.mage, s.hand));
   const health = useGame((s) => (side === "player" ? s.playerHealth : s.opponentHealth));
   const shield = useGame((s) => (side === "player" ? s.playerShield : s.opponentShield));
   const visible = useGame((s) => (side === "player" ? true : s.opponentHealthVisible));
@@ -19,7 +28,7 @@ export default function HealthBar({ side }: { side: Side }) {
 
   return (
     <div
-      className={`battle-health ${side === "player" ? "player-health" : "opponent-health"}`}
+      className={`battle-health ${side === "player" ? "player-health" : "opponent-health"} ${maxDoubled ? "is-maxhp-boost" : ""}`}
       data-health={side}
       role="meter"
       aria-label={`Vida ${side === "player" ? "do jogador" : "do adversário"}: ${clamped} de ${maxHealth}${shield > 0 ? `; escudo ${shield}` : ""}`}
@@ -41,6 +50,7 @@ export default function HealthBar({ side }: { side: Side }) {
         style={{ ["--shield-percent" as string]: shieldPercent }}
       />
       <span className="battle-health-value">{clamped}</span>
+      {maxDoubled && <span className="maxhp-boost-badge" aria-hidden="true">MURALHA ×2</span>}
       <span className="battle-health-effect" aria-hidden="true" />
       <span className="battle-shield" hidden={shield <= 0}>
         {shield > 0 ? `⛨ ${shield} ESCUDO` : ""}
