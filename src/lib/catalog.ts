@@ -17,9 +17,9 @@ export function categoryOf(def: CardDef): ShopCategory {
 export const CONFIG: CatalogConfig = {
   maxHandSize: 7,
   shopTestPrice: 1,
-  infiniteMana: true,
-  maxHealth: 50,
-  maxMana: 10,
+  infiniteMana: false,
+  maxHealth: 100,
+  maxMana: 15,
 };
 
 export const SHOP_DECK: CardDef[] = [
@@ -58,17 +58,20 @@ export const SHOP_DECK: CardDef[] = [
   { id: "time-crystal", name: "TIME CRYSTAL", kind: "equipment", cost: 4, cooldown: 0, target: "self", valueHaste: 0.12, description: "Acelera o crescimento de dano, cura e escudo das suas cartas." },
   { id: "swift-gear", name: "SWIFT GEAR", kind: "equipment", cost: 4, cooldown: 0, target: "self", cooldownHaste: 0.5, description: "Reduz o cooldown das suas cartas progressivamente." },
   { id: "hex-chain", name: "HEX CHAIN", kind: "equipment", cost: 5, cooldown: 0, target: "enemy", valueHaste: 0.09, cooldownHaste: 0.06, description: "Desacelera o haste das cartas do adversário." },
+  // Peças: cartas sem dano, só ativam condições de mago. WAKIZASHI habilita e
+  // intensifica o sangramento de YAMATO (ver passives.ts / useCombatEngine).
+  { id: "wakizashi", name: "WAKIZASHI", kind: "equipment", cost: 3, cooldown: 0, piece: true, bleed: 1, description: "Peça de YAMATO: enquanto estiver no tabuleiro, o oponente sangra — e o sangramento por segundo cresce ao longo da batalha." },
 ];
 
 export const FARM_BOTS: OpponentBuild[] = [
-  { name: "MAGO DAS BRASAS", portrait: "cover-2.jpg", background: "cover-2.jpg", deck: ["ember-sprite", "phoenix-lord", "arcane-barrier"] },
+  { name: "MAGO DAS BRASAS", portrait: "cover-5.jpg", background: "cover-5.jpg", deck: ["ember-sprite", "phoenix-lord", "arcane-barrier"] },
   { name: "ORÁCULO DA MARÉ", portrait: "cover-3.jpg", background: "cover-3.jpg", deck: ["tide-guardian", "healing-rain", "arcane-barrier"] },
   { name: "DRUIDA DO BOSQUE", portrait: "cover-4.jpg", background: "cover-4.jpg", deck: ["thorn-beast", "moonlit-mage", "arcane-barrier"] },
 ];
 
 export const RIVAL_BUILDS: OpponentBuild[] = [
-  { name: "DUELISTA DAS CINZAS", portrait: "cover.jpg", background: "cover.jpg", deck: ["ember-sprite", "dragon-whelp", "phoenix-lord", "starfall"] },
-  { name: "GUARDIÃ DA MARÉ", portrait: "cover-2.jpg", background: "cover-2.jpg", deck: ["tide-guardian", "healing-rain", "moonlit-mage", "arcane-barrier"] },
+  { name: "DUELISTA DAS CINZAS", portrait: "cover-5.jpg", background: "cover-5.jpg", deck: ["ember-sprite", "dragon-whelp", "phoenix-lord", "starfall"] },
+  { name: "GUARDIÃ DA MARÉ", portrait: "cover-6.jpg", background: "cover-6.jpg", deck: ["tide-guardian", "healing-rain", "moonlit-mage", "arcane-barrier"] },
   { name: "CAMPEÃO DO BOSQUE", portrait: "cover-3.jpg", background: "cover-3.jpg", deck: ["thorn-beast", "moonlit-mage", "phoenix-lord", "healing-rain"] },
 ];
 

@@ -6,17 +6,16 @@ import type { Art, CardDef } from "./types";
 const base = "/boargame/img";
 
 export const IMAGE_ARTS: Art[] = [
-  { kind: "image", src: `${base}/cover.jpg` },
-  { kind: "image", src: `${base}/cover-2.jpg` },
   { kind: "image", src: `${base}/cover-3.jpg` },
   { kind: "image", src: `${base}/cover-4.jpg` },
+  { kind: "image", src: `${base}/cover-5.jpg` },
+  { kind: "image", src: `${base}/cover-6.jpg` },
 ];
 
 export const VIDEO_ARTS: Art[] = [
-  { kind: "video", src: `${base}/video-1.mp4`, poster: `${base}/cover.jpg` },
-  { kind: "video", src: `${base}/video-2.mp4`, poster: `${base}/cover-2.jpg` },
-  { kind: "video", src: `${base}/video-3.mp4`, poster: `${base}/cover-3.jpg` },
-  { kind: "video", src: `${base}/video-4.mp4`, poster: `${base}/cover-4.jpg` },
+  { kind: "video", src: `${base}/video-1.mp4`, poster: `${base}/cover-3.jpg` },
+  { kind: "video", src: `${base}/video-2.mp4`, poster: `${base}/cover-4.jpg` },
+  { kind: "video", src: `${base}/video-4.mp4`, poster: `${base}/cover-5.jpg` },
 ];
 
 export function shuffle<T>(items: T[]): T[] {
