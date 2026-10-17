@@ -7,7 +7,9 @@
 import { useEffect, useRef } from "react";
 import { useGame } from "@/lib/store";
 import type { CardInstance } from "@/lib/types";
+import { playEvent } from "@/lib/sfx";
 import CardFace from "./CardFace";
+import { useCardTip } from "@/hooks/useCardTip";
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
@@ -144,8 +146,10 @@ function HandCardItem({ card, index, total, handRef }: ItemProps) {
       if (drop?.type === "summon") s.summon(card.id, drop.index);
       else if (drop?.type === "merge") s.requestMerge(card.id, drop.id);
       else if (shouldDrop && !wasMoved) {
+        playEvent("ui:board.cardSelect");
+        // Os detalhes saem na dica flutuante; o clique sem coringa armado não
+        // tem mais ação.
         if (s.armedJokerId) s.applyJoker(card.id);
-        else s.openModal(card);
       }
     };
 
@@ -211,6 +215,8 @@ function HandCardItem({ card, index, total, handRef }: ItemProps) {
     };
   }, [card, handRef]);
 
+  const tipHandlers = useCardTip(card);
+
   return (
     <CardFace
       card={card}
@@ -218,6 +224,8 @@ function HandCardItem({ card, index, total, handRef }: ItemProps) {
       innerRef={ref}
       style={handStyle(index, total)}
       extraClass={canAct ? "is-summonable" : "is-unaffordable"}
+      onPointerEnter={tipHandlers.onPointerEnter}
+      onPointerLeave={tipHandlers.onPointerLeave}
     />
   );
 }

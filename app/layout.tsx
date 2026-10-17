@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import BackgroundMusic from "@/components/BackgroundMusic";
 import FullscreenPrompt from "@/components/FullscreenPrompt";
+import { AuthProvider } from "@/components/AuthProvider";
+import { SoundProvider } from "@/components/SoundProvider";
 
 export const metadata: Metadata = {
   title: "MAGGI",
@@ -25,7 +27,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {children}
+        <SoundProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </SoundProvider>
         <FullscreenPrompt />
         <BackgroundMusic />
       </body>

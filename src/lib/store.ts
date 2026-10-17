@@ -1,15 +1,23 @@
 "use client";
 
-// Store do jogo. Loop em sequência fixa (3 voltas). A fase de loja é um hub de
-// vendedores (lojas por categoria); roleta de 3 cartas; merge por tier;
-// coringas; cura antes de cada luta. Combate/animações em useCombatEngine.
+// Store do jogo (3 voltas). Fases: bazar (hub de vendedores), aventura (3
+// situações), bot (escolha entre NPCs) e player (modal de versus). O NPC
+// escolhido define um "tema" que influencia a loja/aventura dos próximos ciclos.
+// Vida máxima pode crescer (aventura). Combate/animações em useCombatEngine.
 
 import { create } from "zustand";
 import { artFor, nextId, randomVideoSrc, shuffle } from "./arts";
 import { SHOP_ORDER, categoryOf } from "./catalog";
-import { buildMageDeck, type Mage } from "./mages";
-import { MAX_TIER, randomRouletteTier } from "./tiers";
+import { buildMageDeck, getMage, type Mage } from "./mages";
+import { effectiveMaxHealth } from "./passives";
+import { playEvent } from "./sfx";
+import { playMageCardPlace, playMageLine, resetMageVoice } from "./mage-voice";
+import { fetchOpponentSnapshot } from "./snapshots";
+import { MAX_TIER, tierKey } from "./tiers";
 import type {
+  AdventureKind,
+  AdventureOption,
+  BuildSnapshot,
   CardDef,
   CardInstance,
   CatalogConfig,
@@ -25,21 +33,35 @@ export type { ShopCategory } from "./types";
 
 const PHASE_UNIT: Phase[] = [
   "market",
-  "roulette",
+  "adventure",
   "bot",
   "market",
-  "roulette",
+  "adventure",
   "bot",
-  "roulette",
+  "adventure",
   "market",
   "player",
 ];
 const PASSES = 3;
 const PHASES: Phase[] = Array.from({ length: PASSES }, () => PHASE_UNIT).flat();
 
+// Mana por rodada = base fixa garantida + bônus do dado. Reduz a sorte e sempre
+// permite comprar algumas cartas no começo. Bônus: face 1-2→+0, 3-4→+1, 5-6→+2.
+const DICE_BASE_MANA = 2;
+function diceManaGain(face: number): number {
+  return DICE_BASE_MANA + Math.floor((Math.max(1, Math.min(6, face)) - 1) / 2);
+}
+
 export interface Shop {
   category: ShopCategory;
   items: CardInstance[];
+}
+
+/** Dados do vendedor exibidos na dica flutuante da carta de loja. */
+export interface SellerInfo {
+  name: string;
+  description: string;
+  category: ShopCategory;
 }
 
 interface OpponentState {
@@ -48,10 +70,8 @@ interface OpponentState {
   isPlayer: boolean;
 }
 
-interface RouletteState {
-  spun: boolean;
-  spinning: boolean;
-  cards: CardInstance[];
+interface AdventureState {
+  options: AdventureOption[];
   picked: boolean;
 }
 
@@ -73,16 +93,26 @@ interface GameState {
   phase: Phase;
   mana: number;
   hasRolledThisMarket: boolean;
+  theme: ShopCategory | null; // influência do NPC escolhido
 
   hand: CardInstance[];
   slots: (CardInstance | null)[];
   shops: Shop[];
-  shopView: number | null; // null = hub de vendedores; índice = dentro da loja
+  shopView: number | null;
   opponent: OpponentState | null;
-  roulette: RouletteState;
+  botChoices: OpponentBuild[] | null; // 3 NPCs para escolher (fase bot)
+  versusOpen: boolean; // modal de confronto (fase player)
+  adventure: AdventureState;
 
   playerHealth: number;
+  playerMaxHealth: number;
+  // Vida máxima conquistada com CURA durante a batalha em andamento: o que
+  // transborda do teto vira vida máxima em vez de se perder. Zera a cada
+  // batalha, então não compõe entre lutas.
+  playerMaxHealthGain: number;
   opponentHealth: number;
+  opponentMaxHealth: number;
+  opponentMaxHealthGain: number;
   playerShield: number;
   opponentShield: number;
   opponentHealthVisible: boolean;
@@ -98,7 +128,19 @@ interface GameState {
   armedJokerId: string | null;
   mergePrompt: { sourceId: string; targetId: string } | null;
 
-  modalCard: CardInstance | null;
+  /**
+   * Dica flutuante da carta. Substitui o antigo `modalCard`: a âncora é o
+   * elemento DOM que disparou o hover, porque a carta tem `overflow: hidden` e
+   * o tooltip é posicionado em `document.body` (ver `CardTipHost`).
+   */
+  cardTip: { card: CardInstance; anchor: HTMLElement; hideTier?: boolean } | null;
+
+  /**
+   * Dica flutuante do vendedor (carta de loja do bazar). Mostra nome e
+   * descrição do vendedor. Usa a mesma âncora/portal do `cardTip`, mas com
+   * conteúdo próprio (ver `CardTipHost` / `SellerTooltip`).
+   */
+  sellerTip: { seller: SellerInfo; anchor: HTMLElement } | null;
 
   init: (c: {
     config: CatalogConfig;
@@ -116,54 +158,118 @@ interface GameState {
   advancePhase: () => void;
   continueAfterWin: () => void;
   restartRun: () => void;
-  spinRoulette: () => void;
-  pickRoulette: (id: string) => void;
+  chooseBot: (index: number) => void;
+  startVersus: () => void;
+  pickAdventure: (id: string) => void;
   requestMerge: (sourceId: string, targetId: string) => void;
   confirmMerge: () => void;
   cancelMerge: () => void;
   armJoker: (id: string | null) => void;
   applyJoker: (cardId: string) => void;
-  openModal: (card: CardInstance) => void;
-  closeModal: () => void;
+  openCardTip: (card: CardInstance, anchor: HTMLElement, hideTier?: boolean) => void;
+  closeCardTip: () => void;
+  openSellerTip: (seller: SellerInfo, anchor: HTMLElement) => void;
+  closeSellerTip: () => void;
   resolveBattleEffect: (
     side: Side,
     effectType: EffectType,
     value: number,
   ) => EffectResolution | null;
   fogDamage: (amount: number) => { player: number; opponent: number } | null;
+  /** Sangramento de YAMATO: dano direto só no oponente (ignora escudo). */
+  bleedOpponent: (amount: number) => number;
 
   canAdvance: () => boolean;
   passNumber: () => number;
   isCombat: () => boolean;
+  effectiveMaxHealth: () => number;
 }
 
 const DEFAULT_CONFIG: CatalogConfig = {
   maxHandSize: 999,
   shopTestPrice: 1,
-  infiniteMana: true,
+  infiniteMana: false,
   maxHealth: 20,
-  maxMana: 10,
+  maxMana: 15,
 };
 
-const EMPTY_ROULETTE: RouletteState = { spun: false, spinning: false, cards: [], picked: false };
-const ROULETTE_CARDS = 3;
+const EMPTY_ADVENTURE: AdventureState = { options: [], picked: false };
+const MAXHP_GAIN = 10;
 
 function makeCard(def: CardDef, tier = 0, video?: string): CardInstance {
   return { id: nextId(def.kind), def, tier, art: artFor(def, video) };
 }
 
-// Monta as 4 lojas do bazar, cada uma com 2–3 itens da sua categoria.
-function buildShops(deck: CardDef[], video?: string): Shop[] {
+// Categoria dominante do deck de um NPC (vira o "tema" influente).
+function dominantCategory(build: OpponentBuild, deck: CardDef[]): ShopCategory {
+  const counts: Record<ShopCategory, number> = { dano: 0, cura: 0, aceleracao: 0, escudo: 0 };
+  for (const id of build.deck) {
+    const def = deck.find((d) => d.id === id);
+    if (def) counts[categoryOf(def)] += 1;
+  }
+  return (Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] as ShopCategory) ?? "dano";
+}
+
+// Lojas do bazar; o tema (se houver) deixa a loja daquela categoria um tier acima.
+function buildShops(deck: CardDef[], video?: string, theme?: ShopCategory | null): Shop[] {
   return SHOP_ORDER.map((category) => {
     const pool = deck.filter((d) => d.enabled !== false && categoryOf(d) === category);
     const count = Math.min(3, Math.max(2, pool.length));
-    const items = shuffle(pool).slice(0, count).map((def) => makeCard(def, 0, video));
+    const baseTier = theme && category === theme ? 1 : 0;
+    const items = shuffle(pool).slice(0, count).map((def) => makeCard(def, baseTier, video));
     return { category, items };
   }).filter((shop) => shop.items.length > 0);
 }
 
+// 3 situações da aventura: carta melhorada (do tema), +vida máxima e coringa alto.
+function makeAdventure(
+  deck: CardDef[],
+  theme: ShopCategory | null,
+  pass: number,
+  video?: string,
+): AdventureState {
+  const kinds = shuffle<AdventureKind>(["card", "maxhp", "joker"]);
+  const options: AdventureOption[] = kinds.map((kind) => {
+    const id = nextId("adv");
+    if (kind === "card") {
+      const themed = deck.filter((d) => d.enabled !== false && (!theme || categoryOf(d) === theme));
+      const pool = themed.length ? themed : deck.filter((d) => d.enabled !== false);
+      const src = pool[Math.floor(Math.random() * pool.length)] ?? deck[0];
+      const tier = Math.min(MAX_TIER, 2 + pass);
+      return {
+        id,
+        kind,
+        title: "RELÍQUIA",
+        desc: `Ganhe ${src.name} (tier ${tierKey(tier)}).`,
+        icon: "🃏",
+        card: makeCard(src, tier, video),
+      };
+    }
+    if (kind === "maxhp") {
+      return {
+        id,
+        kind,
+        title: "FONTE VITAL",
+        desc: `+${MAXHP_GAIN} de vida máxima.`,
+        icon: "❤",
+        amount: MAXHP_GAIN,
+      };
+    }
+    const tier = Math.min(MAX_TIER, 3 + pass);
+    return {
+      id,
+      kind,
+      title: "CORINGA RARO",
+      desc: `Ganhe um coringa tier ${tierKey(tier)}.`,
+      icon: "★",
+      tier,
+    };
+  });
+  return { options, picked: false };
+}
+
 function buildOpponent(build: OpponentBuild, deck: CardDef[], tier: number, isPlayer: boolean): OpponentState {
-  const video = randomVideoSrc(); // oponente usa um vídeo próprio nos feitiços
+  const video = randomVideoSrc();
   const cards: (CardInstance | null)[] = [];
   build.deck.forEach((cardId) => {
     const def = deck.find((d) => d.id === cardId);
@@ -172,6 +278,26 @@ function buildOpponent(build: OpponentBuild, deck: CardDef[], tier: number, isPl
   });
   while (cards.length < 4) cards.push(null);
   return { build, cards, isPlayer };
+}
+
+// Monta o oponente a partir de um snapshot de jogador real: tier por carta e
+// mago próprios da build gravada (a vida máxima vem no próprio snapshot).
+function buildOpponentFromSnapshot(snap: BuildSnapshot, deck: CardDef[]): OpponentState {
+  const video = randomVideoSrc();
+  const mage = getMage(snap.mageId);
+  const cards: (CardInstance | null)[] = snap.slots.map((slot) => {
+    if (!slot) return null;
+    const def = deck.find((d) => d.id === slot.cardId);
+    return def ? makeCard(def, slot.tier, video) : null;
+  });
+  while (cards.length < 4) cards.push(null);
+  const build: OpponentBuild = {
+    name: snap.name,
+    portrait: mage ? mage.portrait.split("/").pop() ?? "cover-3.jpg" : "cover-3.jpg",
+    background: mage?.theme ?? "",
+    deck: snap.slots.flatMap((s) => (s ? [s.cardId] : [])),
+  };
+  return { build, cards, isPlayer: true };
 }
 
 function findCard(state: GameState, id: string): CardInstance | null {
@@ -190,16 +316,23 @@ export const useGame = create<GameState>((set, get) => ({
   phase: "market",
   mana: 0,
   hasRolledThisMarket: false,
+  theme: null,
 
-  hand: [], // começa sem cartas
+  hand: [],
   slots: [null, null, null, null],
   shops: [],
   shopView: null,
   opponent: null,
-  roulette: EMPTY_ROULETTE,
+  botChoices: null,
+  versusOpen: false,
+  adventure: EMPTY_ADVENTURE,
 
   playerHealth: DEFAULT_CONFIG.maxHealth,
+  playerMaxHealth: DEFAULT_CONFIG.maxHealth,
+  playerMaxHealthGain: 0,
   opponentHealth: DEFAULT_CONFIG.maxHealth,
+  opponentMaxHealth: DEFAULT_CONFIG.maxHealth,
+  opponentMaxHealthGain: 0,
   playerShield: 0,
   opponentShield: 0,
   opponentHealthVisible: false,
@@ -215,7 +348,8 @@ export const useGame = create<GameState>((set, get) => ({
   armedJokerId: null,
   mergePrompt: null,
 
-  modalCard: null,
+  cardTip: null,
+  sellerTip: null,
 
   init: ({ config, cards, farmBots, rivalBuilds, mage }) => {
     set({
@@ -228,8 +362,11 @@ export const useGame = create<GameState>((set, get) => ({
       hand: [],
       slots: [null, null, null, null],
       playerHealth: config.maxHealth,
+      playerMaxHealth: config.maxHealth,
+      playerMaxHealthGain: 0,
       playerShield: 0,
       mana: 0,
+      theme: null,
       jokers: [],
       victories: 0,
       runComplete: false,
@@ -240,8 +377,9 @@ export const useGame = create<GameState>((set, get) => ({
   rollDie: (face) => {
     const { phase, hasRolledThisMarket, config, mana } = get();
     if (phase !== "market" || hasRolledThisMarket) return;
-    const nextMana = config.infiniteMana ? mana : Math.min(config.maxMana, mana + face);
+    const nextMana = config.infiniteMana ? mana : Math.min(config.maxMana, mana + diceManaGain(face));
     set({ hasRolledThisMarket: true, mana: nextMana });
+    playEvent("event:dice");
   },
 
   openShop: (index) => {
@@ -263,7 +401,9 @@ export const useGame = create<GameState>((set, get) => ({
       return { ...shop, items: shop.items.filter((i) => i.id !== id) };
     });
     if (!bought) return;
-    set({ shops: nextShops, hand: [...hand, makeCard((bought as CardInstance).def, 0, get().mage?.video)] });
+    const b = bought as CardInstance;
+    set({ shops: nextShops, hand: [...hand, makeCard(b.def, b.tier, get().mage?.video)] });
+    playEvent("event:buy");
   },
 
   summon: (cardId, slotIndex) => {
@@ -275,6 +415,9 @@ export const useGame = create<GameState>((set, get) => ({
     const nextSlots = [...slots];
     nextSlots[slotIndex] = card;
     set({ hand: hand.filter((c) => c.id !== cardId), slots: nextSlots });
+    playEvent("event:cardPlaced");
+    // Fala extra do mago: 30% de chance, e só ao posicionar no tabuleiro.
+    playMageCardPlace(get().mage);
   },
 
   returnToHand: (cardId) => {
@@ -292,8 +435,8 @@ export const useGame = create<GameState>((set, get) => ({
     const s = get();
     if (s.phase === "market") {
       if (s.battleActive || !s.hasRolledThisMarket) return;
-    } else if (s.phase === "roulette") {
-      if (!s.roulette.spun) return; // pode avançar sem escolher carta
+    } else if (s.phase === "adventure") {
+      if (!s.adventure.picked) return;
     } else {
       return;
     }
@@ -303,7 +446,19 @@ export const useGame = create<GameState>((set, get) => ({
   continueAfterWin: () => {
     const s = get();
     if (s.battleWinner !== "player") {
-      get().restartRun();
+      // Derrota: só perde a run se for contra um JOGADOR (fase "player"/rival).
+      // Perder para um NPC (bot) NÃO encerra a run — segue para a próxima fase,
+      // sem ganhar vitória nem coringa.
+      if (s.phase === "player") {
+        get().restartRun();
+        return;
+      }
+      set({ battleResultOpen: false });
+      if (s.phaseIndex + 1 >= PHASES.length) {
+        set({ runComplete: true, battleActive: false });
+        return;
+      }
+      enterPhase(s.phaseIndex + 1, set, get);
       return;
     }
     const victories = s.victories + 1;
@@ -320,14 +475,23 @@ export const useGame = create<GameState>((set, get) => ({
 
   restartRun: () => {
     const { config } = get();
+    // Recomeçando: cala a fala que ainda tocava e limpa o guarda, para a
+    // INTRO da primeira fase não ser engolida pela fala da run anterior.
+    resetMageVoice();
     set({
       hand: [],
       slots: [null, null, null, null],
       playerHealth: config.maxHealth,
+      playerMaxHealth: config.maxHealth,
+      playerMaxHealthGain: 0,
       playerShield: 0,
       opponentShield: 0,
       mana: 0,
+      theme: null,
       opponent: null,
+      botChoices: null,
+      versusOpen: false,
+      adventure: EMPTY_ADVENTURE,
       battleActive: false,
       battleWinner: null,
       battleResultOpen: false,
@@ -337,37 +501,75 @@ export const useGame = create<GameState>((set, get) => ({
       jokers: [],
       armedJokerId: null,
       mergePrompt: null,
-      modalCard: null,
+      cardTip: null,
     });
     enterPhase(0, set, get);
   },
 
-  spinRoulette: () => {
+  chooseBot: (index) => {
     const s = get();
-    if (s.phase !== "roulette" || s.roulette.spun) return;
-    const video = s.mage?.video;
-    const available = s.deck.filter((card) => card.enabled !== false);
-    if (available.length === 0) return;
-    const fallback = available[0];
-    if (!fallback) return;
-    const cards = Array.from({ length: ROULETTE_CARDS }, () => {
-      const def = available[Math.floor(Math.random() * available.length)];
-      return makeCard(def ?? fallback, randomRouletteTier(), video);
+    if (s.phase !== "bot" || !s.botChoices || !s.botChoices[index]) return;
+    playEvent("event:newBoard");
+    // Fase de batalha: a fala é BATTLE_STARTS, nunca a INTRO.
+    playMageLine(s.mage, "BATTLE_STARTS");
+    const build = s.botChoices[index];
+    const pass = Math.floor(s.phaseIndex / PHASE_UNIT.length);
+    const opponent = buildOpponent(build, s.deck, Math.min(MAX_TIER, pass), false);
+    set({
+      opponent,
+      botChoices: null,
+      theme: dominantCategory(build, s.deck),
+      // Vida máxima do jogador na largada: base + passiva. O ganho de cura da
+      // batalha anterior não compõe — a cura guarda vida só dentro da luta.
+      playerHealth: effectiveMaxHealth(s.playerMaxHealth, s.mage, s.hand),
+      playerMaxHealthGain: 0,
+      playerShield: 0,
+      opponentHealth: s.config.maxHealth,
+      opponentMaxHealth: s.config.maxHealth,
+      opponentMaxHealthGain: 0,
+      opponentShield: 0,
+      opponentHealthVisible: true,
+      battleActive: true,
+      battleOpponentName: build.name,
     });
-    set({ roulette: { spun: true, spinning: true, cards, picked: false } });
-    window.setTimeout(() => {
-      const r = get().roulette;
-      if (r.spun) set({ roulette: { ...r, spinning: false } });
-    }, 1500);
   },
 
-  pickRoulette: (id) => {
+  startVersus: () => {
     const s = get();
-    const r = s.roulette;
-    if (!r.spun || r.spinning || r.picked) return;
-    const card = r.cards.find((c) => c.id === id);
-    if (!card) return;
-    set({ hand: [...s.hand, makeCard(card.def, card.tier, s.mage?.video)], roulette: { ...r, picked: true } });
+    if (s.phase !== "player" || !s.opponent) return;
+    playEvent("event:newBoard");
+    // Fase de batalha: a fala é BATTLE_STARTS, nunca a INTRO.
+    playMageLine(s.mage, "BATTLE_STARTS");
+    set({
+      versusOpen: false,
+      playerHealth: effectiveMaxHealth(s.playerMaxHealth, s.mage, s.hand),
+      playerMaxHealthGain: 0,
+      playerShield: 0,
+      opponentHealth: s.opponentMaxHealth,
+      opponentMaxHealthGain: 0,
+      opponentShield: 0,
+      opponentHealthVisible: true,
+      battleActive: true,
+    });
+  },
+
+  pickAdventure: (id) => {
+    const s = get();
+    if (s.phase !== "adventure" || s.adventure.picked) return;
+    const opt = s.adventure.options.find((o) => o.id === id);
+    if (!opt) return;
+    playEvent("event:optionSelected");
+    if (opt.kind === "card" && opt.card) {
+      set({ hand: [...s.hand, opt.card] });
+    } else if (opt.kind === "maxhp" && opt.amount) {
+      set({
+        playerMaxHealth: s.playerMaxHealth + opt.amount,
+        playerHealth: s.playerHealth + opt.amount,
+      });
+    } else if (opt.kind === "joker" && opt.tier !== undefined) {
+      set({ jokers: addJoker(s.jokers, { id: nextId("joker"), tier: opt.tier }) });
+    }
+    set({ adventure: { ...get().adventure, picked: true } });
   },
 
   requestMerge: (sourceId, targetId) => {
@@ -413,8 +615,19 @@ export const useGame = create<GameState>((set, get) => ({
     });
   },
 
-  openModal: (card) => set({ modalCard: card }),
-  closeModal: () => set({ modalCard: null }),
+  openCardTip: (card, anchor, hideTier) => {
+    // Mantido o evento `event:cardModal`: os bindings de áudio do painel já
+    // apontam para ele, então o som que você configurou continua valendo.
+    playEvent("event:cardModal");
+    set({ cardTip: { card, anchor, hideTier } });
+  },
+  closeCardTip: () => set({ cardTip: null }),
+
+  openSellerTip: (seller, anchor) => {
+    playEvent("event:cardModal");
+    set({ sellerTip: { seller, anchor } });
+  },
+  closeSellerTip: () => set({ sellerTip: null }),
 
   resolveBattleEffect: (side, effectType, value) => {
     const s = get();
@@ -424,7 +637,8 @@ export const useGame = create<GameState>((set, get) => ({
     let actualValue = value;
     let targetSide: Side;
     let { playerHealth, opponentHealth, playerShield, opponentShield } = s;
-    const maxH = s.config.maxHealth;
+    let playerMaxHealthGain = s.playerMaxHealthGain;
+    let opponentMaxHealthGain = s.opponentMaxHealthGain;
 
     if (effectType === "damage") {
       const targetIsPlayer = !isPlayer;
@@ -445,11 +659,21 @@ export const useGame = create<GameState>((set, get) => ({
         opponentHealth = Math.max(0, opponentHealth - remaining);
       }
     } else if (effectType === "healing") {
+      // A cura NÃO tem teto. O que passaria do máximo não se perde: vira vida
+      // máxima. 100 de vida, 60 de cura em cima => 160 de vida em 160.
       targetSide = side;
+      const cap = isPlayer
+        ? effectiveMaxHealth(s.playerMaxHealth, s.mage, s.hand, playerMaxHealthGain)
+        : s.opponentMaxHealth + opponentMaxHealthGain;
       const previousHealth = isPlayer ? playerHealth : opponentHealth;
-      if (isPlayer) playerHealth = Math.min(maxH, playerHealth + value);
-      else opponentHealth = Math.min(maxH, opponentHealth + value);
-      actualValue = (isPlayer ? playerHealth : opponentHealth) - previousHealth;
+      const healed = previousHealth + value;
+      if (healed > cap) {
+        if (isPlayer) playerMaxHealthGain += healed - cap;
+        else opponentMaxHealthGain += healed - cap;
+      }
+      if (isPlayer) playerHealth = healed;
+      else opponentHealth = healed;
+      actualValue = healed - previousHealth;
     } else {
       targetSide = side;
       if (isPlayer) playerShield += value;
@@ -458,7 +682,14 @@ export const useGame = create<GameState>((set, get) => ({
 
     const affectedPlayer = effectType === "damage" ? !isPlayer : isPlayer;
     const resultingHealth = affectedPlayer ? playerHealth : opponentHealth;
-    set({ playerHealth, opponentHealth, playerShield, opponentShield });
+    set({
+      playerHealth,
+      opponentHealth,
+      playerShield,
+      opponentShield,
+      playerMaxHealthGain,
+      opponentMaxHealthGain,
+    });
 
     if (resultingHealth <= 0) {
       const winner: Side = isPlayer ? "player" : "opponent";
@@ -482,17 +713,33 @@ export const useGame = create<GameState>((set, get) => ({
     return { player: playerApplied, opponent: opponentApplied };
   },
 
+  bleedOpponent: (amount) => {
+    const s = get();
+    if (!s.battleActive) return 0;
+    const applied = Math.min(s.opponentHealth, amount);
+    const opponentHealth = Math.max(0, s.opponentHealth - amount);
+    set({ opponentHealth });
+    if (opponentHealth <= 0) {
+      set({ battleActive: false, battleWinner: "player", battleResultOpen: true });
+    }
+    return applied;
+  },
+
   canAdvance: () => {
     const s = get();
     if (s.battleActive) return false;
     if (s.phase === "market") return s.hasRolledThisMarket;
-    if (s.phase === "roulette") return s.roulette.spun;
+    if (s.phase === "adventure") return s.adventure.picked;
     return false;
   },
   passNumber: () => Math.floor(get().phaseIndex / PHASE_UNIT.length) + 1,
   isCombat: () => {
     const p = get().phase;
     return p === "bot" || p === "player";
+  },
+  effectiveMaxHealth: () => {
+    const s = get();
+    return effectiveMaxHealth(s.playerMaxHealth, s.mage, s.hand, s.playerMaxHealthGain);
   },
 }));
 
@@ -514,6 +761,7 @@ function enterPhase(
   }
   const phase = PHASES[index];
   const pass = Math.floor(index / PHASE_UNIT.length);
+  const s = get();
   const common: Partial<GameState> = {
     phaseIndex: index,
     phase,
@@ -521,51 +769,74 @@ function enterPhase(
     battleWinner: null,
     armedJokerId: null,
     mergePrompt: null,
+    battleActive: false,
+    opponentHealthVisible: false,
+    opponentMaxHealth: s.config.maxHealth,
+    // Nenhuma fase carrega vida máxima de cura da luta anterior.
+    playerMaxHealthGain: 0,
+    opponentMaxHealthGain: 0,
+    opponent: null,
+    botChoices: null,
+    versusOpen: false,
+    shops: [],
+    shopView: null,
+    adventure: EMPTY_ADVENTURE,
   };
 
+  // Fala do mago: a INTRO toca só quando a PRIMEIRA fase da run começa
+  // (index 0). Nas demais fases ela não toca; em `bot`/`player` quem fala é
+  // BATTLE_STARTS, no momento em que a luta começa (chooseBot / startVersus).
   if (phase === "market") {
     set({
       ...common,
       hasRolledThisMarket: false,
-      battleActive: false,
-      opponentHealthVisible: false,
-      opponent: null,
-      shops: buildShops(get().deck, get().mage?.video),
-      shopView: null,
-      roulette: EMPTY_ROULETTE,
+      shops: buildShops(s.deck, s.mage?.video, s.theme),
     });
+    playEvent("event:newCards");
+    if (index === 0) playMageLine(s.mage, "INTRO");
     return;
   }
 
-  if (phase === "roulette") {
+  if (phase === "adventure") {
     set({
       ...common,
-      battleActive: false,
-      opponentHealthVisible: false,
-      opponent: null,
-      shops: [],
-      shopView: null,
-      roulette: { ...EMPTY_ROULETTE },
+      adventure: makeAdventure(s.deck, s.theme, pass, s.mage?.video),
     });
+    playEvent("event:newCards");
     return;
   }
 
-  const { deck, config } = get();
-  const pool = phase === "bot" ? get().farmBots : get().rivalBuilds;
-  const build = pool[Math.floor(Math.random() * pool.length)];
-  const opponent = buildOpponent(build, deck, Math.min(MAX_TIER, pass), phase === "player");
+  if (phase === "bot") {
+    // 3 NPCs para escolher; a luta começa após a escolha (chooseBot).
+    set({ ...common, botChoices: shuffle(s.farmBots).slice(0, 3) });
+    playEvent("event:newBoard");
+    return;
+  }
+
+  // player: confronto assíncrono contra a build de um jogador real.
+  // Mostra de imediato um rival estático (fallback) e, em paralelo, busca um
+  // snapshot do mesmo "pass"; se houver, substitui o oponente antes da luta.
+  const build = s.rivalBuilds[Math.floor(Math.random() * s.rivalBuilds.length)];
+  const opponent = buildOpponent(build, s.deck, Math.min(MAX_TIER, pass), true);
   set({
     ...common,
-    shops: [],
-    shopView: null,
-    roulette: EMPTY_ROULETTE,
     opponent,
-    playerHealth: config.maxHealth,
-    playerShield: 0,
-    opponentHealth: config.maxHealth,
-    opponentShield: 0,
-    opponentHealthVisible: true,
-    battleActive: true,
+    opponentMaxHealth: s.config.maxHealth,
+    versusOpen: true,
     battleOpponentName: build.name,
+  });
+
+  const passNo = pass + 1; // 1..3
+  void fetchOpponentSnapshot(passNo).then((snap) => {
+    if (!snap) return;
+    const cur = get();
+    // Só aplica se ainda estamos no mesmo versus aguardando (sem luta iniciada).
+    if (cur.phase !== "player" || !cur.versusOpen || cur.battleActive) return;
+    const realOpponent = buildOpponentFromSnapshot(snap, cur.deck);
+    set({
+      opponent: realOpponent,
+      opponentMaxHealth: snap.maxHealth,
+      battleOpponentName: snap.name,
+    });
   });
 }

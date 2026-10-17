@@ -7,6 +7,8 @@ import Link from "next/link";
 import type { CatalogResponse } from "@/lib/types";
 import MageSelect from "@/components/MageSelect";
 import AppBackground from "@/components/AppBackground";
+import LoadingScreen from "@/components/LoadingScreen";
+import NavLink from "@/components/NavLink";
 
 export default function MagosPage() {
   const [catalog, setCatalog] = useState<CatalogResponse | null>(null);
@@ -33,18 +35,13 @@ export default function MagosPage() {
       <main className="loading-screen">
         <p>Falha ao carregar o catálogo: {catalogError}</p>
         <Link href="/admin" className="menu-note">Abrir editor de balanceamento</Link>
-        <Link href="/" className="menu-note">← Voltar ao menu</Link>
+        <NavLink event="ui:menu.play" href="/" className="menu-note">← Voltar ao menu</NavLink>
       </main>
     );
   }
 
   if (!catalog) {
-    return (
-      <main className="loading-screen">
-        <p>Carregando magos…</p>
-        <Link href="/" className="menu-note">← Voltar ao menu</Link>
-      </main>
-    );
+    return <LoadingScreen label="Carregando magos…" />;
   }
 
   return (

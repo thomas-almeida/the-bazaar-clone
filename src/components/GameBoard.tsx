@@ -5,43 +5,106 @@
 // tabuleiro do jogador com 4 slots, badge à esquerda e rack de coringas à direita.
 
 import { useGame, type Shop, type ShopCategory } from "@/lib/store";
+import { useSoundEvent } from "@/components/useSoundEvent";
+import { playEvent } from "@/lib/sfx";
+import { useAuth } from "./AuthProvider";
+import { PASSIVE_INFO } from "@/lib/mages";
+import { applyOverride, useMageConfig } from "@/lib/mage-config";
 import { useCombatEngine } from "@/hooks/useCombatEngine";
+import type { AdventureOption, OpponentBuild } from "@/lib/types";
 import CardFace from "./CardFace";
 import OfferTile from "./OfferTile";
 import HealthBar from "./HealthBar";
 import Hand from "./Hand";
 import DiceConsole from "./DiceConsole";
-import CardModal from "./CardModal";
+import CardTipHost from "./CardTipHost";
 import BattleResult from "./BattleResult";
 import ProjectileLayer from "./ProjectileLayer";
 import FogTimerLine from "./FogTimerLine";
 import FogOverlay from "./FogOverlay";
-import RouletteReels from "./RouletteReels";
 import JokerRack from "./JokerRack";
 import MergePrompt from "./MergePrompt";
 import SlotCard from "./SlotCard";
 import SynergyLines from "./SynergyLines";
+import PhaseIntro from "./PhaseIntro";
+import VersusModal from "./VersusModal";
+import TutorialOverlay from "./TutorialOverlay";
 
-const SHOP_META: Record<ShopCategory, { label: string; icon: string; cls: string }> = {
-  dano: { label: "DANO", icon: "⚔", cls: "shop-dano" },
-  cura: { label: "CURA", icon: "✚", cls: "shop-cura" },
-  aceleracao: { label: "ACELERAÇÃO", icon: "⚡", cls: "shop-haste" },
-  escudo: { label: "ESCUDO", icon: "⛨", cls: "shop-escudo" },
+const SHOP_META: Record<ShopCategory, { label: string; icon: string; cls: string; art: string; cutout: string; desc: string }> = {
+  dano: { label: "Jay Jay", icon: "⚔", cls: "shop-dano", art: "/boargame/img/loja-dano.jpg", cutout: "/boargame/img/loja-dano.png", desc: "Vende armas e criaturas que dão dano." },
+  cura: { label: "Yaga", icon: "✚", cls: "shop-cura", art: "/boargame/img/loja-cura.jpg", cutout: "/boargame/img/loja-cura.png", desc: "Vende provisões de cura." },
+  aceleracao: { label: "Billy", icon: "⚡", cls: "shop-haste", art: "/boargame/img/loja-aceleracao.jpg", cutout: "/boargame/img/loja-aceleracao.png", desc: "Vende Feitiços de Aceleração." },
+  escudo: { label: "Donavan", icon: "⛨", cls: "shop-escudo", art: "/boargame/img/loja-escudo.jpg", cutout: "/boargame/img/loja-escudo.png", desc: "Forja armaduras e escudos." },
 };
 
 function ShopCard({ shop, index }: { shop: Shop; index: number }) {
   const open = useGame((s) => s.openShop);
+  const openTip = useGame((s) => s.openSellerTip);
+  const closeTip = useGame((s) => s.closeSellerTip);
+  const soundOpen = useSoundEvent("ui:shop.open");
   const meta = SHOP_META[shop.category];
+  const seller = { name: meta.label, description: meta.desc, category: shop.category };
   return (
     <button
       type="button"
       className={`shop-card ${meta.cls}`}
-      onClick={() => open(index)}
-      aria-label={`Entrar na loja de ${meta.label}`}
+      onClick={() => { soundOpen(); open(index); }}
+      aria-label={`Entrar na loja de ${meta.label}. ${meta.desc}`}
+      onPointerEnter={(e) => {
+        playEvent("ui:board.cardHover");
+        openTip(seller, e.currentTarget);
+      }}
+      onPointerDown={(e) => {
+        if (e.pointerType !== "mouse") openTip(seller, e.currentTarget);
+      }}
+      onPointerLeave={() => closeTip()}
     >
-      <span className="shop-card-icon" aria-hidden="true">{meta.icon}</span>
-      <span className="shop-card-name">LOJA DE<br />{meta.label}</span>
-      <span className="shop-card-count">{shop.items.length} itens</span>
+      <img className="shop-card-photo" src={meta.art} alt="" aria-hidden="true" />
+      <img className="shop-card-cutout" src={meta.cutout} alt="" aria-hidden="true" />
+      <span className="shop-card-grad" aria-hidden="true" />
+    </button>
+  );
+}
+
+function AdventureCard({ option }: { option: AdventureOption }) {
+  const pick = useGame((s) => s.pickAdventure);
+  const picked = useGame((s) => s.adventure.picked);
+  const soundPick = useSoundEvent("ui:adventure.pick");
+  return (
+    <button
+      type="button"
+      className={`adventure-card adv-${option.kind} ${picked ? "is-locked" : "is-pickable"}`}
+      onClick={() => {
+        if (picked) return;
+        soundPick();
+        pick(option.id);
+      }}
+      disabled={picked}
+      aria-label={option.title}
+    >
+      <span className="adv-icon" aria-hidden="true">{option.icon}</span>
+      <span className="adv-title">{option.title}</span>
+      <span className="adv-desc">{option.desc}</span>
+    </button>
+  );
+}
+
+function NpcCard({ build, index }: { build: OpponentBuild; index: number }) {
+  const choose = useGame((s) => s.chooseBot);
+  const soundPick = useSoundEvent("ui:bot.pick");
+  return (
+    <button
+      type="button"
+      className="npc-card"
+      onClick={() => { soundPick(); choose(index); }}
+      aria-label={`Enfrentar ${build.name}`}
+    >
+      <img className="npc-art" src={`/boargame/img/${build.portrait}`} alt="" />
+      <span className="npc-grad" aria-hidden="true" />
+      <span className="npc-text">
+        <span className="npc-name">{build.name}</span>
+        <span className="npc-go">ENFRENTAR</span>
+      </span>
     </button>
   );
 }
@@ -51,30 +114,36 @@ function UpperRow() {
   const shops = useGame((s) => s.shops);
   const shopView = useGame((s) => s.shopView);
   const opponent = useGame((s) => s.opponent);
-  const roulette = useGame((s) => s.roulette);
+  const adventure = useGame((s) => s.adventure);
+  const botChoices = useGame((s) => s.botChoices);
   const canAdvance = useGame((s) => s.canAdvance());
   const advancePhase = useGame((s) => s.advancePhase);
-  const spinRoulette = useGame((s) => s.spinRoulette);
   const closeShop = useGame((s) => s.closeShop);
 
   const isMarket = phase === "market";
-  const isRoulette = phase === "roulette";
-  const isCombat = phase === "bot" || phase === "player";
+  const isAdventure = phase === "adventure";
   const inShop = isMarket && shopView !== null && !!shops[shopView];
+  const inBotChoice = phase === "bot" && !!botChoices;
+  const showOpponentBoard = (phase === "bot" || phase === "player") && !!opponent && !inBotChoice;
   const build = opponent?.build;
 
-  const ownerLabel = isRoulette
-    ? "GAMBLER"
-    : isCombat
-      ? phase === "bot"
+  const ownerLabel = isAdventure
+    ? "AVENTURA"
+    : inBotChoice
+      ? "OPONENTE?"
+      : phase === "bot"
         ? "BOT"
-        : "JOGADOR"
-      : inShop
-        ? SHOP_META[shops[shopView!].category].label
-        : "BAZAR";
-  const ownerImg = isCombat
-    ? `/boargame/img/${build?.portrait ?? "cover.jpg"}`
-    : "/boargame/img/cover.jpg";
+        : phase === "player"
+          ? "JOGADOR"
+          : inShop
+            ? SHOP_META[shops[shopView!].category].label
+            : "BAZAR";
+  const ownerImg = showOpponentBoard
+    ? `/boargame/img/${build?.portrait ?? "cover-3.jpg"}`
+    : isAdventure || inBotChoice
+      ? "/boargame/img/the-gambler.jpg"
+      : "/boargame/img/bazaar-seller.jpg";
+  const isGambler = isAdventure || inBotChoice;
 
   let offersClass = "is-combat-board";
   let tileCount = 4;
@@ -94,11 +163,15 @@ function UpperRow() {
       ) : (
         items.map((offer) => <OfferTile key={offer.id} offer={offer} />)
       );
-  } else if (isRoulette) {
-    offersClass = "is-roulette";
-    tileCount = 3;
-    content = <RouletteReels />;
-  } else if (isCombat) {
+  } else if (isAdventure) {
+    offersClass = "is-adventure";
+    tileCount = Math.max(1, adventure.options.length);
+    content = adventure.options.map((opt) => <AdventureCard key={opt.id} option={opt} />);
+  } else if (inBotChoice) {
+    offersClass = "is-npc-choice";
+    tileCount = Math.max(1, botChoices.length);
+    content = botChoices.map((b, i) => <NpcCard key={`${b.name}-${i}`} build={b} index={i} />);
+  } else if (showOpponentBoard) {
     content = opponent?.cards.map((card, i) =>
       card ? (
         <CardFace key={card.id} card={card} context="combat" extraClass="bot-board-card" />
@@ -108,33 +181,13 @@ function UpperRow() {
     );
   }
 
-  // Botão de avanço (AVANÇAR / RODAR); VOLTAR só dentro de uma loja.
-  let advButton: React.ReactNode = null;
-  if (isMarket) {
-    advButton = (
-      <button className="phase-next" type="button" disabled={!canAdvance} onClick={advancePhase}>
-        <span aria-hidden="true">➜</span>
-        <span>AVANÇAR</span>
-      </button>
-    );
-  } else if (isRoulette) {
-    advButton = roulette.spun ? (
-      <button className="phase-next" type="button" disabled={!canAdvance} onClick={advancePhase}>
-        <span aria-hidden="true">➜</span>
-        <span>AVANÇAR</span>
-      </button>
-    ) : (
-      <button className="phase-next phase-spin" type="button" onClick={spinRoulette}>
-        <span aria-hidden="true">🎰</span>
-        <span>RODAR</span>
-      </button>
-    );
-  }
+  // Botão AVANÇAR só na loja e na aventura; VOLTAR só dentro de uma loja.
+  const showAdvance = isMarket || isAdventure;
 
   return (
     <div className="opponent-row-layout">
       <aside
-        className={`board-owner-badge ${isRoulette ? "is-gambler" : ""}`}
+        className={`board-owner-badge ${isGambler ? "is-gambler" : ""}`}
         aria-label={`Contexto: ${ownerLabel}`}
       >
         <img src={ownerImg} alt="" />
@@ -152,9 +205,29 @@ function UpperRow() {
         </div>
       </div>
 
-      {advButton}
+      {showAdvance && (
+        <button
+          className="phase-next"
+          type="button"
+          disabled={!canAdvance}
+          onClick={() => {
+            playEvent("event:optionSelected");
+            advancePhase();
+          }}
+        >
+          <span aria-hidden="true">➜</span>
+          <span>AVANÇAR</span>
+        </button>
+      )}
       {inShop && (
-        <button className="phase-next phase-back" type="button" onClick={closeShop}>
+        <button
+          className="phase-next phase-back"
+          type="button"
+          onClick={() => {
+            playEvent("event:optionSelected");
+            closeShop();
+          }}
+        >
           <span aria-hidden="true">↩</span>
           <span>VOLTAR</span>
         </button>
@@ -166,17 +239,41 @@ function UpperRow() {
 function PlayerRow() {
   const slots = useGame((s) => s.slots);
   const armed = useGame((s) => s.armedJokerId);
+  const baseMage = useGame((s) => s.mage);
+  const mageConfig = useMageConfig((s) => s.config);
+  const mage = baseMage ? applyOverride(baseMage, mageConfig) : null;
+  const magePortrait = mage?.portrait;
+  const passive = mage ? PASSIVE_INFO[mage.passive] : null;
+  const { user } = useAuth();
+  const username =
+    (user?.user_metadata?.display_name as string | undefined)?.trim() || "JOGADOR";
 
   return (
     <div
-      className={`board-row board-row-player grid grid-cols-4 gap-2 p-4 border ${armed ? "is-joker-armed" : ""}`}
+      className={`board-row board-row-player grid grid-cols-4 border ${armed ? "is-joker-armed" : ""}`}
       data-board-row="player"
+      data-passive={mage?.passive ?? ""}
       aria-label="Seu tabuleiro"
     >
       <div className="board-row-art" aria-hidden="true" />
-      <aside className="board-owner-badge board-player-badge" aria-label="Seu personagem: jogador">
-        <img src="/boargame/img/cover.jpg" alt="Ícone do jogador" />
-        <span className="board-owner-label">PLAYER</span>
+      <aside
+        className={`board-owner-badge board-player-badge ${mage?.cutout ? "has-cutout" : ""}`}
+        aria-label={`Seu personagem: ${username}`}
+        style={mage ? { ["--badge-accent" as string]: mage.accent } : undefined}
+      >
+        {mage?.cutout ? (
+          // Com recorte: o quadro leva a borda (nítida) e recorta a foto de base
+          // borrada por dentro; o recorte nítido salta por cima.
+          <span className="board-badge-frame">
+            <img className="board-badge-photo" src={magePortrait ?? "/boargame/img/cover-3.jpg"} alt="Ícone do jogador" />
+          </span>
+        ) : (
+          <img src={magePortrait ?? "/boargame/img/cover-3.jpg"} alt="Ícone do jogador" />
+        )}
+        {mage?.cutout && (
+          <img className="board-badge-cutout" src={mage.cutout} alt="" aria-hidden="true" />
+        )}
+        <span className="board-owner-label">{username}</span>
       </aside>
       {slots.map((card, i) => (
         <div
@@ -200,7 +297,7 @@ export default function GameBoard() {
   return (
     <>
       <div id="tridiv">
-        <div className="scene" style={{ transform: "rotateX(-53deg) rotateY(0deg)" }}>
+        <div className="scene" style={{ transform: "rotateX(-42deg) rotateY(0deg)" }}>
           <div className="shape cuboid-1 cub-1">
             <div className="face ft hidden">
               <div className="photon-shader" style={{ backgroundColor: "rgba(0,0,0,0.114)" }} />
@@ -237,8 +334,11 @@ export default function GameBoard() {
       <DiceConsole />
       <ProjectileLayer />
       <MergePrompt />
-      <CardModal />
+      <CardTipHost />
+      <VersusModal />
+      <PhaseIntro />
       <BattleResult />
+      <TutorialOverlay />
     </>
   );
 }

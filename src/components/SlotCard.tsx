@@ -1,19 +1,33 @@
 "use client";
 
 // Carta invocada num slot do tabuleiro. Fora de batalha pode ser arrastada de
-// volta para a mão (desfaz a invocação). Clique aplica coringa armado ou abre
-// detalhes. Durante o combate fica estática.
+// volta para a mão (desfaz a invocação). Clique aplica coringa armado; os
+// detalhes saem na dica flutuante (hover/toque). Durante o combate fica
+// estática.
 
 import { useEffect, useMemo, useRef } from "react";
 import { useGame } from "@/lib/store";
 import { computeSynergy, NO_BONUS } from "@/lib/synergy";
+import { playerPassiveMods } from "@/lib/passives";
 import type { CardInstance } from "@/lib/types";
 import CardFace from "./CardFace";
+import { useCardTip } from "@/hooks/useCardTip";
+import { playEvent } from "@/lib/sfx";
 
 export default function SlotCard({ card, index }: { card: CardInstance; index: number }) {
   const ref = useRef<HTMLElement>(null);
   const slots = useGame((s) => s.slots);
-  const bonus = useMemo(() => computeSynergy(slots).bonuses[index] ?? NO_BONUS, [slots, index]);
+  const mage = useGame((s) => s.mage);
+  const bonus = useMemo(() => {
+    const syn = computeSynergy(slots).bonuses[index] ?? NO_BONUS;
+    const p = playerPassiveMods(slots, mage, index);
+    return {
+      bonusValue: syn.bonusValue,
+      cooldownMult: syn.cooldownMult * p.cdMult,
+      valueMult: p.valueMult,
+      active: p.active,
+    };
+  }, [slots, mage, index]);
 
   useEffect(() => {
     const el = ref.current;
@@ -38,8 +52,10 @@ export default function SlotCard({ card, index }: { card: CardInstance; index: n
 
     const onClick = () => {
       const s = useGame.getState();
+      playEvent("ui:board.cardSelect");
+      // O detalhe da carta virou a dica flutuante (hover/toque). O clique só
+      // serve ao coringa armado; sem ele não há mais nada a fazer.
       if (s.armedJokerId) s.applyJoker(card.id);
-      else s.openModal(card);
     };
 
     const endDrag = (event: PointerEvent, shouldDrop: boolean) => {
@@ -110,5 +126,17 @@ export default function SlotCard({ card, index }: { card: CardInstance; index: n
     };
   }, [card]);
 
-  return <CardFace card={card} context="slot" innerRef={ref} synergyBonus={bonus} />;
+  const tipHandlers = useCardTip(card);
+
+  return (
+    <CardFace
+      card={card}
+      context="slot"
+      innerRef={ref}
+      synergyBonus={bonus}
+      passiveActive={bonus.active}
+      onPointerEnter={tipHandlers.onPointerEnter}
+      onPointerLeave={tipHandlers.onPointerLeave}
+    />
+  );
 }

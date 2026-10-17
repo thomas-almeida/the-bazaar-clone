@@ -1,29 +1,38 @@
 "use client";
 
 // Música de fundo global em loop. Fica no layout, então persiste entre as telas
-// (não reinicia ao navegar). Volume maior nos menus e menor dentro do jogo
-// (/play). Como navegadores bloqueiam autoplay com som, tentamos tocar no mount
-// e também na primeira interação do usuário; há um botão de mute.
+// (não reinicia ao navegar). O volume vem dos Ajustes (useAudioSettings), com um
+// fator menor dentro do jogo (/play). Como navegadores bloqueiam autoplay com
+// som, tentamos tocar no mount e também na primeira interação do usuário.
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { BACKGROUNDS, useBackground } from "@/lib/backgrounds";
+import { useAudioSettings } from "@/lib/sfx";
+import { useGame } from "@/lib/store";
+import { applyOverride, useMageConfig } from "@/lib/mage-config";
 
-const MENU_VOLUME = 0.55;
-const GAME_VOLUME = 0.22;
+const GAME_FACTOR = 0.4; // música mais baixa dentro do jogo
 
 export default function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const pathname = usePathname();
-  const [muted, setMuted] = useState(false);
+  const bgIndex = useBackground((s) => s.index);
+  const musicVolume = useAudioSettings((s) => s.musicVolume);
+  const mage = useGame((s) => s.mage);
+  const config = useMageConfig((s) => s.config);
 
   const inGame = pathname?.startsWith("/play") ?? false;
-  const target = inGame ? GAME_VOLUME : MENU_VOLUME;
+  // No jogo, a música é a do mago; fora dele, a trilha do tema sorteado.
+  const soundtrack = inGame && mage
+    ? applyOverride(mage, config).music
+    : BACKGROUNDS[bgIndex]?.soundtrack ?? BACKGROUNDS[0].soundtrack;
+  const target = musicVolume * (inGame ? GAME_FACTOR : 1);
 
   // Tenta tocar no mount e na primeira interação (contorna o autoplay).
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
-    a.volume = MENU_VOLUME;
     const tryPlay = () => a.play().catch(() => {});
     tryPlay();
     const onInteract = () => {
@@ -34,35 +43,29 @@ export default function BackgroundMusic() {
     return () => window.removeEventListener("pointerdown", onInteract);
   }, []);
 
-  // Rampa suave de volume ao trocar de tela / mutar.
+  // Troca a faixa quando o tema de fundo sorteado muda.
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
-    const to = muted ? 0 : target;
+    a.load();
+    a.play().catch(() => {});
+  }, [soundtrack]);
+
+  // Rampa suave ao trocar de tela; aplicação direta ao mexer no slider.
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a) return;
     const from = a.volume;
     const start = performance.now();
     let raf = 0;
     const step = (t: number) => {
-      const k = Math.min(1, (t - start) / 500);
-      a.volume = from + (to - from) * k;
+      const k = Math.min(1, (t - start) / 300);
+      a.volume = Math.min(1, Math.max(0, from + (target - from) * k));
       if (k < 1) raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [target, muted]);
+  }, [target]);
 
-  return (
-    <>
-      <audio ref={audioRef} src="/boargame/img/menu-song.mp3" loop preload="auto" />
-      <button
-        type="button"
-        className={`music-toggle ${muted ? "is-muted" : ""}`}
-        onClick={() => setMuted((m) => !m)}
-        aria-label={muted ? "Ativar música" : "Silenciar música"}
-        title={muted ? "Ativar música" : "Silenciar música"}
-      >
-        {muted ? "🔇" : "🔊"}
-      </button>
-    </>
-  );
+  return <audio ref={audioRef} src={soundtrack} loop preload="auto" />;
 }

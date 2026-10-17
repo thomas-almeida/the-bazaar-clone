@@ -48,3 +48,13 @@ patches de forma explícita. Configure `.env.local` a partir de
 Supabase. Credenciais privilegiadas devem permanecer no servidor. O upload
 local de arte é exclusivo de desenvolvimento; os detalhes completos estão no
 guia.
+
+## Contas de jogador
+
+O cadastro/login usa Supabase Auth (email e senha). Configure
+`NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` no
+`.env.local`, habilite o provedor Email e defina as URLs de redirecionamento em
+Authentication → URL Configuration no dashboard do Supabase. O cadastro pede
+um nome de jogador; o perfil e o último mago escolhido ao iniciar uma run ficam
+nos metadados da conta, sem migration adicional. Para detalhes, veja a seção
+“Contas de jogador” no guia.

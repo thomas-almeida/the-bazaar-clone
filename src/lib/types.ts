@@ -3,8 +3,11 @@
 
 export type CardKind = "creature" | "spell" | "equipment";
 export type EffectType = "damage" | "healing" | "shield";
-// Fases do loop: loja, roleta (slot de cassino), bot e player (rival local).
-export type Phase = "market" | "roulette" | "bot" | "player";
+
+// Som que a carta toca quando o cooldown dispara no combate.
+export type CardSound = "sword" | "pistol" | "blast" | "heal" | "shield" | "haste";
+// Fases do loop: bazar, aventura (3 situações), bot e player (rival local).
+export type Phase = "market" | "adventure" | "bot" | "player";
 export type Side = "player" | "opponent";
 // Categorias de loja / especialidade de mago.
 export type ShopCategory = "dano" | "cura" | "aceleracao" | "escudo";
@@ -53,7 +56,20 @@ export interface CardDef {
   damage?: number;
   effectType?: EffectType;
   effectValue?: number;
+  /** Som disparado quando o cooldown da carta ativa no combate. */
+  sound?: CardSound;
   description: string;
+  /**
+   * "Peça": carta que não dá dano nem efeito — existe só para ativar/cumprir
+   * condições de mago (ex.: WAKIZASHI habilita o sangramento de YAMATO). Peças
+   * não entram no combate como atacantes.
+   */
+  piece?: boolean;
+  /**
+   * Sangramento por segundo que a peça contribui (passo de escalonamento, estilo
+   * névoa). Vale quando o mago com a passiva de sangramento está em jogo.
+   */
+  bleed?: number;
   // Campos de equipamento (kind === "equipment"):
   target?: HasteTarget;
   valueHaste?: number; // acréscimo à taxa de crescimento de atk/heal/shield por segundo
@@ -67,6 +83,23 @@ export interface OpponentBuild {
   portrait: string;
   background: string;
   deck: string[]; // IDs estáveis de cartas do shopDeck
+}
+
+// Uma posição do board num snapshot: carta (ID estável) + tier individual.
+export interface SnapshotSlot {
+  cardId: string;
+  tier: number;
+}
+
+// Snapshot da build de um jogador real, gravado a cada confronto da fase
+// "player" (3 por run). A vida máxima já vem com a passiva do mago embutida,
+// porque a mão do adversário não é simulada do outro lado.
+export interface BuildSnapshot {
+  name: string; // display_name do jogador
+  mageId: string;
+  maxHealth: number;
+  pass: number; // 1..3 — qual das 3 lutas contra player
+  slots: (SnapshotSlot | null)[]; // 4 posições
 }
 
 export interface CatalogConfig {
@@ -99,4 +132,17 @@ export interface CardInstance {
 export interface Joker {
   id: string;
   tier: number;
+}
+
+// Situação da fase de aventura: dá uma carta melhorada, +vida máxima ou coringa.
+export type AdventureKind = "card" | "maxhp" | "joker";
+export interface AdventureOption {
+  id: string;
+  kind: AdventureKind;
+  title: string;
+  desc: string;
+  icon: string;
+  card?: CardInstance; // kind === "card"
+  amount?: number; // kind === "maxhp"
+  tier?: number; // kind === "joker"
 }
