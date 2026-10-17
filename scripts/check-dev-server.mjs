@@ -9,7 +9,7 @@
 
 import { execFileSync } from "node:child_process";
 
-const FORCE = process.env.MAGGI_SKIP_DEV_CHECK === "1";
+const FORCE = process.env.MAGGI_SKIP_DEV_CHECK === "1" || process.env.VERCEL === "1" || process.env.CI === "true";
 
 function devServers() {
   try {
