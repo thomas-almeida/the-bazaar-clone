@@ -5,11 +5,12 @@
 
 import { useEffect, useRef } from "react";
 import { useGame } from "@/lib/store";
+import { useCardTip } from "@/hooks/useCardTip";
+import CardFace from "./CardFace";
 import type { CardInstance } from "@/lib/types";
 
 export default function OfferTile({ offer }: { offer: CardInstance }) {
-  const ref = useRef<HTMLButtonElement>(null);
-  const price = useGame((s) => s.config.shopTestPrice);
+  const ref = useRef<HTMLElement>(null);
   const canPurchase = useGame((s) => {
     const enough = s.config.infiniteMana || s.mana >= s.config.shopTestPrice;
     return s.phase === "market" && enough && s.hand.length < s.config.maxHandSize;
@@ -79,7 +80,11 @@ export default function OfferTile({ offer }: { offer: CardInstance }) {
       const bounds = el.getBoundingClientRect();
       const preview = el.cloneNode(true) as HTMLElement;
       preview.classList.remove("is-dragging-source");
-      preview.classList.add("offer-drag-preview");
+      // A oferta agora é um `.hand-card` (CardFace). O preview reusa a classe
+      // `.drag-preview` (regra `.hand-card.drag-preview`), cuja especificidade
+      // (0,2,0) vence o `transform` da base `.hand-card` — senão a carta
+      // arrastada não segue o ponteiro.
+      preview.classList.add("drag-preview");
       preview.style.width = `${bounds.width}px`;
       preview.style.height = `${bounds.height}px`;
       preview.style.setProperty("--drag-x", `${bounds.left}px`);
@@ -99,12 +104,14 @@ export default function OfferTile({ offer }: { offer: CardInstance }) {
       document.addEventListener("pointercancel", onCancel);
     };
 
+    // O clique não abre mais nada: arrastar até a mão continua comprando, e os
+    // detalhes saem na dica flutuante (hover/toque).
     const onClick = () => {
       if (suppressClick) {
         suppressClick = false;
         return;
       }
-      useGame.getState().openModal(offer);
+      useGame.getState().closeCardTip();
     };
 
     el.addEventListener("pointerdown", onDown);
@@ -120,34 +127,19 @@ export default function OfferTile({ offer }: { offer: CardInstance }) {
   }, [offer]);
 
   const { def } = offer;
-  const typeText =
-    def.kind === "creature"
-      ? `CRIATURA · NÍVEL ${def.level}`
-      : def.kind === "spell"
-        ? "FEITIÇO"
-        : "EQUIPAMENTO";
+  const tipHandlers = useCardTip(offer);
 
+  // Carta de loja com o design normal (CardFace). Os detalhes saem na dica
+  // flutuante (hover/toque); arrastar até a mão continua comprando.
   return (
-    <button
-      ref={ref}
-      type="button"
-      className={`offer-tile tier-D ${canPurchase ? "is-purchasable is-draggable" : "is-unavailable"}`}
-      aria-label={`${def.name}, ${price} de mana. Clique para ver detalhes.`}
-    >
-      <span className="card-tier-badge" aria-hidden="true">D</span>
-      <span className="offer-tile-art">
-        {offer.art?.kind === "video" ? (
-          <video src={offer.art.src} poster={offer.art.poster} autoPlay muted loop playsInline preload="metadata" />
-        ) : offer.art ? (
-          <img src={offer.art.src} alt="" />
-        ) : null}
-      </span>
-      <span className="offer-tile-details">
-        <span className="offer-tile-name">{def.name}</span>
-        <span className="offer-tile-type">{typeText}</span>
-        <span className="offer-tile-description">{def.description}</span>
-      </span>
-      <span className="card-cost offer-tile-price offer-tile-cost">{price}</span>
-    </button>
+    <CardFace
+      card={offer}
+      context="hand"
+      innerRef={ref}
+      extraClass={`offer-card ${canPurchase ? "is-purchasable is-draggable" : "is-unavailable"}`}
+      onPointerEnter={tipHandlers.onPointerEnter}
+      onPointerDown={tipHandlers.onPointerDown}
+      onPointerLeave={tipHandlers.onPointerLeave}
+    />
   );
 }

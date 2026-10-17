@@ -14,7 +14,8 @@
  * REFERENCIA PORTADA DE src/boargame/board.css
  * ========================================================================= */
 
-/* /!\ You need to add vendor prefixes in order to render the CSS properly (or simply use http://leaverou.github.io/prefixfree/) /!\ */ #tridiv {
+/* /!\ You need to add vendor prefixes in order to render the CSS properly (or simply use http://leaverou.github.io/prefixfree/) /!\ */
+#tridiv {
   perspective: 1200px;
   position: absolute;
   overflow: hidden;
@@ -25,16 +26,22 @@
 }
 
 body {
-    background: #010102;
+  background: #010102;
 }
 
 .face {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4);
 }
-.scene, .shape, .face, .face-wrapper, .cr {
+
+.scene,
+.shape,
+.face,
+.face-wrapper,
+.cr {
   position: absolute;
   transform-style: preserve-3d;
 }
+
 .scene {
   width: 80em;
   height: 80em;
@@ -43,6 +50,7 @@ body {
   margin: -40em 0 0 -40em;
   pointer-events: none;
 }
+
 .shape {
   top: 50%;
   left: 50%;
@@ -50,21 +58,26 @@ body {
   height: 0;
   transform-origin: 50%;
 }
-.face, .face-wrapper {
+
+.face,
+.face-wrapper {
   overflow: hidden;
   transform-origin: 0 0;
   backface-visibility: hidden;
   /* hidden by default, prevent blinking and other weird rendering glitchs */
 }
+
 .face {
-  background-size: 100% 100%!important;
+  background-size: 100% 100% !important;
   background-position: center;
 }
+
 .face-wrapper .face {
   left: 100%;
   width: 100%;
   height: 100%
 }
+
 .photon-shader {
   position: absolute;
   left: 0;
@@ -72,62 +85,82 @@ body {
   width: 100%;
   height: 100%
 }
+
 .side {
   left: 50%;
 }
-.cr, .cr .side {
+
+.cr,
+.cr .side {
   height: 100%;
 }
-[class*="cuboid"] .ft, [class*="cuboid"] .bk {
+
+[class*="cuboid"] .ft,
+[class*="cuboid"] .bk {
   width: 100%;
   height: 100%;
 }
+
 [class*="cuboid"] .bk {
   left: 100%;
 }
+
 [class*="cuboid"] .rt {
   transform: rotateY(-90deg) translateX(-50%);
 }
+
 [class*="cuboid"] .lt {
   transform: rotateY(90deg) translateX(-50%);
 }
+
 [class*="cuboid"] .tp {
-  transform: rotateX(65deg) translateY(-50%);
+  transform: rotateX(45deg) translateY(-50%);
 }
+
 [class*="cuboid"] .bm {
   transform: rotateX(-90deg) translateY(-50%);
 }
+
 [class*="cuboid"] .lt {
   left: 100%;
 }
+
 [class*="cuboid"] .bm {
   top: 100%;
 }
+
 /* .cub-1 styles */
 .cub-1 {
-  transform:translate3D(0em, 0em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-  opacity:1;
-  width:42.5em;
-  height:1.375em;
-  margin:-0.6875em 0 0 -21.25em;
+  transform: translate3D(0em, 0em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  opacity: 1;
+  width: 42.5em;
+  height: 1.375em;
+  margin: -0.6875em 0 0 -21.25em;
 }
+
 .cub-1 .ft {
-  transform:translateZ(15em);
+  transform: translateZ(15em);
 }
+
 .cub-1 .bk {
-  transform:translateZ(-15em) rotateY(180deg);
+  transform: translateZ(-15em) rotateY(180deg);
 }
-.cub-1 .rt, .cub-1 .lt {
-  width:30em;
-  height:1.375em;
+
+.cub-1 .rt,
+.cub-1 .lt {
+  width: 30em;
+  height: 1.375em;
 }
-.cub-1 .tp, .cub-1 .bm {
-  width:42.5em;
-  height:30em;
+
+.cub-1 .tp,
+.cub-1 .bm {
+  width: 42.5em;
+  height: 30em;
 }
+
 .cub-1 .face {
-  background-color:#3d3d3d09;
-  color:#ffffff;
+  background-color: #3d3d3d09;
+  color: #ffffff;
 }
 
 .face.tp {
@@ -256,12 +289,10 @@ body {
   inset: 2px auto 2px 2px;
   z-index: 1;
   width: var(--shield-percent, 0%);
-  background: linear-gradient(
-    90deg,
-    rgba(255, 218, 95, 0.18),
-    rgba(255, 218, 95, 0.56) 72%,
-    rgba(255, 244, 182, 0.74)
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 218, 95, 0.18),
+      rgba(255, 218, 95, 0.56) 72%,
+      rgba(255, 244, 182, 0.74));
   border-right: 1px solid rgba(255, 242, 175, 0.92);
   box-shadow: 0 0 7px rgba(255, 220, 103, 0.48);
   transition: width 320ms ease, opacity 180ms ease;
@@ -331,7 +362,8 @@ body {
     transform: translateY(calc(-50% + 1px)) scale(0.9);
   }
 
-  42%, 76% {
+  42%,
+  76% {
     opacity: 1;
     transform: translateY(-50%) scale(1);
   }
@@ -433,9 +465,9 @@ body {
   box-shadow: 0 0 18px rgba(255, 255, 255, 0.38);
 }
 
-.board-row > :not(.board-row-art):not(.board-owner-badge):not(.joker-rack) {
+.board-row> :not(.board-row-art):not(.board-owner-badge):not(.joker-rack) {
   z-index: 1;
-  width: 86%;
+  width: 100%;
   height: 92%;
   justify-self: center;
   align-self: center;
@@ -451,7 +483,7 @@ body {
   translate: 0 -5%;
 }
 
-.board-row-opponent > .opponent-offers {
+.board-row-opponent>.opponent-offers {
   position: relative;
   z-index: 1;
   display: grid;
@@ -467,7 +499,7 @@ body {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.opponent-offers.is-combat-board > .hand-card {
+.opponent-offers.is-combat-board>.hand-card {
   position: relative;
   inset: auto;
   box-sizing: border-box;
@@ -481,12 +513,12 @@ body {
   transition: none;
 }
 
-.opponent-offers.is-combat-board > .hand-card:hover {
+.opponent-offers.is-combat-board>.hand-card:hover {
   z-index: 1;
   transform: none;
 }
 
-.opponent-offers.is-combat-board > .bot-empty-slot {
+.opponent-offers.is-combat-board>.bot-empty-slot {
   width: 100%;
   height: 100%;
   min-width: 0;
@@ -506,7 +538,7 @@ body {
   flex-basis: 19px;
   width: 19px;
   height: 19px;
-  font-size: 10px;
+  font-size: 20px;
 }
 
 .opponent-offers.is-combat-board .card-type {
@@ -528,13 +560,42 @@ body {
   font-size: clamp(6px, 0.42vw, 7px);
 }
 
-.board-owner-badge,
+/* Loja do vendedor: as ofertas usam o design normal de carta (CardFace) e
+   preenchem a célula do grid como as cartas do tabuleiro de combate. */
+.opponent-offers.is-market {
+  align-items: stretch;
+  justify-items: center;
+}
+
+.opponent-offers.is-market > .hand-card {
+  position: relative;
+  inset: auto;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 220px;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(4px, 0.45vw, 8px);
+  transform: none;
+  touch-action: none;
+}
+
+.opponent-offers.is-market > .hand-card.is-unavailable {
+  opacity: 0.5;
+  filter: saturate(0.6);
+}
+
+.opponent-offers.is-market > .hand-card.is-dragging-source {
+  opacity: 0.35;
+}
+
 .phase-next {
   position: absolute;
   top: 12%;
   z-index: 3;
   display: flex;
-  width: 100px;
+  width: 200px;
   min-height: 100px;
   flex-direction: column;
   align-items: center;
@@ -543,37 +604,51 @@ body {
   color: #fff;
   background: linear-gradient(160deg, rgba(38, 42, 52, 0.417), rgba(10, 12, 18, 0.96));
   border: 2px solid rgba(237, 238, 241, 0.68);
-  border-top-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 0 10px 0 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.48), inset 0 1px rgba(255, 255, 255, 0.16);
   transform: translateY(-50%);
 }
 
+/* Badges do tabuleiro: mesmo visual do retrato do menu principal (domo no topo
+   + borda de acento + brilho), com o nome ABAIXO da badge. */
+.board-owner-badge {
+  position: absolute;
+  top: 12%;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  pointer-events: none;
+  transform: translateY(-50%);
+  --badge-accent: #cdd6ea;
+}
+
 .phase-next {
-  left: -10%;
   top: 50%;
 }
 
 .board-owner-badge {
-    left: -10% !important;
+  left: -25% !important;
 }
 
 .board-owner-badge img {
-  padding-top: 10px;
-  width: 70px;
-  height: 70px;
+  width: 200px;
+  height: 120px;
   object-fit: cover;
-  border-radius: 40%;
-}
-
-.board-owner-badge {
-  left: -52px;
-  pointer-events: none;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  border: 4px solid color-mix(in srgb, var(--badge-accent) 72%, white);
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--badge-accent) 34%, transparent),
+    0 4px 14px rgba(0, 0, 0, 0.5);
 }
 
 .board-player-badge {
-  left: -12% !important;
-  top: 12%;
+  top: 20%;
 }
 
 .board-owner-icon {
@@ -581,14 +656,20 @@ body {
 }
 
 .board-owner-label {
-  font: 800 10px/1 monospace;
-  padding-top: 10px;
-  padding-bottom:10px;
-  letter-spacing: 0.06em;
+  max-width: 104px;
+  overflow: hidden;
+  color: #eef2fb;
+  font: 800 20px/1 monospace;
+  letter-spacing: 0.04em;
+  font-style: italic;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.82);
+  white-space: nowrap;
 }
 
 .phase-next {
-  right: -52px;
+  left: -25%;
   padding: 6px 2px;
   font: 800 14px/1 monospace;
   letter-spacing: 0.05em;
@@ -606,8 +687,8 @@ body {
 }
 
 .phase-next:not(:disabled):hover {
-  background: linear-gradient(160deg, #66512e, #282016);
-  box-shadow: 0 0 14px rgba(255, 225, 171, 0.42);
+  background: linear-gradient(160deg, #a4a4a40d, #d7d7d62b);
+  box-shadow: 0 0 14px rgba(143, 215, 104, 0.42);
 }
 
 .offer-tile,
@@ -761,17 +842,6 @@ body {
   font-size: 13px;
 }
 
-.offer-drag-preview {
-  position: fixed !important;
-  z-index: 1000 !important;
-  inset: auto auto auto 0 !important;
-  margin: 0;
-  transform: translate3d(var(--drag-x), var(--drag-y), 0) scale(1.04);
-  transition: none !important;
-  pointer-events: none;
-  will-change: transform;
-}
-
 .card-hand.is-drop-target {
   filter: drop-shadow(0 0 18px rgba(255, 226, 160, 0.85));
 }
@@ -788,6 +858,12 @@ body {
 .board-row-player {
   grid-row: 4;
   translate: 0 5%;
+  /* Mesmo recuo e espaçamento do tabuleiro do oponente: o oponente usa
+     `.board-row-opponent { padding: 0.55rem }` com um grid interno que tem gap;
+     aqui o próprio `.board-row-player` é o grid (grid-cols-4), então o padding e
+     o gap vão direto nele para as cartas ficarem idênticas em tamanho/espaço. */
+  padding: 0.55rem;
+  gap: clamp(4px, 0.8vw, 12px);
   border-color: rgba(174, 223, 159, 0.9);
   box-shadow:
     0 9px 20px rgba(0, 0, 0, 0.46),
@@ -795,7 +871,7 @@ body {
     inset 0 0 0 1px rgba(229, 255, 214, 0.2);
 }
 
-.board-row-player > .player-slot {
+.board-row-player>.player-slot {
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.07), transparent 24% 72%, rgba(0, 0, 0, 0.42)),
     radial-gradient(ellipse at 50% 42%, rgba(37, 49, 66, 0.3), rgba(5, 8, 15, 0.68) 76%);
@@ -1135,6 +1211,7 @@ body {
       inset 0 3px 7px rgba(255, 255, 255, 0.12),
       0 0 8px rgba(255, 94, 94, 0.55);
   }
+
   to {
     border-color: #fff;
     box-shadow:
@@ -1152,6 +1229,7 @@ body {
   from {
     filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.35));
   }
+
   to {
     filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 8px rgba(255, 78, 78, 0.9));
   }
@@ -1165,19 +1243,12 @@ body {
 @keyframes dice-roll {
   from {
     transform:
-      translate3d(var(--die-offset-x, 0px), var(--die-offset-y, 0px), 0)
-      translateZ(calc(var(--die-size) / -2))
-      rotateX(-72deg) rotateY(-6deg)
-      rotateX(var(--roll-start-x)) rotateY(var(--roll-start-y)) rotateZ(var(--roll-start-z));
+      translate3d(var(--die-offset-x, 0px), var(--die-offset-y, 0px), 0) translateZ(calc(var(--die-size) / -2)) rotateX(-72deg) rotateY(-6deg) rotateX(var(--roll-start-x)) rotateY(var(--roll-start-y)) rotateZ(var(--roll-start-z));
   }
+
   to {
     transform:
-      translate3d(var(--die-offset-x, 0px), var(--die-offset-y, 0px), 0)
-      translateZ(calc(var(--die-size) / -2))
-      rotateX(-72deg) rotateY(-6deg)
-      rotateX(calc(var(--roll-end-x) + 720deg))
-      rotateY(calc(var(--roll-end-y) + 540deg))
-      rotateZ(calc(var(--roll-end-z) + 360deg));
+      translate3d(var(--die-offset-x, 0px), var(--die-offset-y, 0px), 0) translateZ(calc(var(--die-size) / -2)) rotateX(-72deg) rotateY(-6deg) rotateX(calc(var(--roll-end-x) + 720deg)) rotateY(calc(var(--roll-end-y) + 540deg)) rotateZ(calc(var(--roll-end-z) + 360deg));
   }
 }
 
@@ -1210,14 +1281,17 @@ body {
   left: var(--card-position, calc(26% + var(--card-index) * 15%));
   display: flex;
   flex-direction: column;
+  isolation: isolate;
   width: calc(var(--card-width) * 1.1);
   height: calc(var(--card-width) * 1.48);
-  padding: 8px;
+  padding: 0;
   overflow: hidden;
   color: #e9e8f5;
   text-align: center;
+  /* A arte é o fundo da carta; sem arte (ou arte translúcida) aparece o
+     gradiente de tier. A cor do tier vive na borda de 3px. */
   background: var(--card-background);
-  border: 1px solid rgba(225, 229, 242, 0.28);
+  border: 3px solid var(--card-accent, rgba(225, 229, 242, 0.294));
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.08),
     0 10px 26px rgba(0, 0, 0, 0.55);
@@ -1280,7 +1354,7 @@ body {
   color: #ffe36e;
 }
 
-.effect-pop-active > .card-effect-pop {
+.effect-pop-active>.card-effect-pop {
   animation: damage-pop-bounce 1250ms ease-out both;
 }
 
@@ -1299,7 +1373,8 @@ body {
     transform: translate(-50%, 1px) scale(0.9);
   }
 
-  42%, 76% {
+  42%,
+  76% {
     opacity: 1;
     transform: translate(-50%, 0) scale(1);
   }
@@ -1311,12 +1386,15 @@ body {
 }
 
 @keyframes card-shot-flash {
-  0%, 100% {
+
+  0%,
+  100% {
     border-color: rgba(225, 229, 242, 0.28);
     box-shadow:
       inset 0 0 0 1px rgba(255, 255, 255, 0.08),
       0 10px 26px rgba(0, 0, 0, 0.55);
   }
+
   45% {
     border-color: #fff;
     box-shadow:
@@ -1352,7 +1430,7 @@ body {
   padding: clamp(20px, 5vw, 64px);
   place-items: center;
   overflow-y: auto;
-  background: rgba(3, 5, 12, 0.94);
+  background: rgba(0, 0, 0, 0.924);
   backdrop-filter: blur(12px);
 }
 
@@ -1403,7 +1481,7 @@ body {
 .card-modal-art .card-header {
   min-height: 42px;
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: 20px;
 }
 
 .card-modal-art .card-cost {
@@ -1496,16 +1574,18 @@ body.card-modal-open {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 98%;
-  height: 98%;
+  width: 100%;
+  height: 100%;
   z-index: 1;
-  padding: 8px;
+  padding: clamp(4px, 0.45vw, 8px);
   border-radius: 0;
   box-shadow:
     0 20px 24px rgba(0, 0, 0, 0.58),
     0 7px 12px rgba(0, 0, 0, 0.42),
     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  transform: translate(-50%, -53%) translateZ(38px);
+  /* Sem translateZ: ele ampliava a carta ~3% (perspectiva) e a deixava maior
+     que a do oponente. O "pop" vertical fica no -53%. */
+  transform: translate(-50%, -53%);
   animation: none;
   transition: none;
   cursor: default;
@@ -1513,8 +1593,37 @@ body.card-modal-open {
   overflow: visible;
 }
 
-.opponent-offers.is-combat-board > .hand-card {
+.opponent-offers.is-combat-board>.hand-card {
   overflow: visible;
+}
+
+/* As cartas do tabuleiro do jogador usam a MESMA escala de fonte/espaçamento
+   das cartas do bot (.is-combat-board), para que os dois tabuleiros fiquem
+   iguais em tamanho de conteúdo. */
+.board-row-player .card-header {
+  min-height: 23px;
+  padding: 3px 4px;
+  font-size: clamp(6px, 0.48vw, 8px);
+}
+
+.board-row-player .card-cost {
+  flex-basis: 19px;
+  width: 19px;
+  height: 19px;
+  font-size: 20px;
+}
+
+.board-row-player .card-type {
+  font-size: clamp(6px, 0.42vw, 7px);
+}
+
+.board-row-player .card-level {
+  font-size: 6px;
+}
+
+.board-row-player .card-stats {
+  padding: 3px 1px;
+  font-size: clamp(8px, 0.65vw, 11px);
 }
 
 .player-slot .hand-card:hover {
@@ -1542,17 +1651,21 @@ body.card-modal-open {
 }
 
 @keyframes slot-card-hover {
-  0%, 100% {
-    transform: translate(-50%, -53%) translateZ(38px);
+
+  0%,
+  100% {
+    transform: translate(-50%, -53%);
   }
 
   50% {
-    transform: translate(-50%, -55%) translateZ(38px) rotateX(1.5deg) rotateY(-1.5deg);
+    transform: translate(-50%, -55%) rotateX(1.5deg) rotateY(-1.5deg);
   }
 }
 
 @keyframes slot-shadow-hover {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.72;
     transform: scale(1);
   }
@@ -1585,38 +1698,11 @@ body.card-modal-open {
   display: contents;
 }
 
+/* Carta de vídeo: a arte já é o fundo por regra geral (.card-art). Aqui só
+   fica o fundo de reserva e o enquadramento do vídeo. O véu é o .card-scrim
+   comum a todas as cartas — manter um véu próprio duplicaria o escurecimento. */
 .video-card {
-  isolation: isolate;
   background: #101522;
-}
-
-.video-card > .card-art {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  width: auto;
-  height: auto;
-  min-height: 0;
-  margin: 0;
-  overflow: hidden;
-  border: 0;
-  background: none;
-}
-
-.video-card::before {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background:
-    linear-gradient(180deg, rgba(5, 9, 17, 0.86) 0%, rgba(5, 9, 17, 0.48) 15%, transparent 36%),
-    linear-gradient(0deg, rgba(5, 9, 17, 0.94) 0%, rgba(5, 9, 17, 0.7) 28%, rgba(5, 9, 17, 0.24) 58%, transparent 78%);
-  content: "";
-  pointer-events: none;
-}
-
-.video-card > :not(.card-art):not(:where(.card-effect-pop)) {
-  position: relative;
-  z-index: 1;
 }
 
 .video-card .card-header {
@@ -1642,7 +1728,7 @@ body.card-modal-open {
   padding-top: 28px;
 }
 
-.video-card > .video-card-info {
+.video-card>.video-card-info {
   position: absolute;
 }
 
@@ -1664,33 +1750,77 @@ body.card-modal-open {
 }
 
 .card-header {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
+  width: 100%;
   justify-content: space-between;
   gap: 4px;
   min-height: 28px;
-  padding: 4px 6px;
+  padding: 4px 4px 4px 7px;
   overflow: hidden;
   color: #e7e4f4;
-  font: 700 8px/1.2 monospace;
   letter-spacing: 0.04em;
   white-space: nowrap;
   border-radius: 5px;
 }
 
+.card-name {
+  display: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Custo + tier, juntos e ancorados no canto superior direito. */
+.card-topright {
+  width: 100%;
+  font: 900 20px/1 monospace;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+}
+
+/* Selo de tier. Fora da carta ele é absoluto (é assim que `.offer-tile`, que
+   tem markup próprio, posiciona o "D"); dentro do cabeçalho da carta ele entra
+   no fluxo, ao lado do custo. */
+.card-tier-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: grid;
+  min-width: 25px;
+  height: 25px;
+  padding: 0 4px;
+  place-items: center;
+  color: #0c0f14;
+  font: bold 14px/1 oblique;
+  background: var(--card-accent, #ccc);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--card-accent, #ccc) 55%, transparent);
+}
+
+.card-topright .card-tier-badge {
+  position: static;
+  z-index: auto;
+  flex: none;
+}
+
 .card-cost {
   display: grid;
-  flex: 0 0 19px;
-  width: 19px;
-  height: 19px;
+  width: 25px;
+  height: 25px;
   place-items: center;
-  color: #000000;
-  font: 900 10px/1 monospace;
-  background: linear-gradient(145deg, #86f1ff, #2042d9);
-  border: 1px solid #67dcff;
-  border-top-right-radius: 0px;
-  border-top-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  color: #ffffff;
+  font: 900 15px/1 monospace;
+  background: linear-gradient(145deg, #156af2, #0323af);
+  border: 2px solid #0051ff;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
   border-bottom-left-radius: 0px;
   box-shadow: 0 0 8px rgba(3, 3, 3, 0.35);
 }
@@ -1702,17 +1832,57 @@ body.card-modal-open {
   font-size: 13px;
 }
 
+/* Arte como fundo da carta: camada absoluta cobrindo a caixa de padding, atrás
+   do texto. Mantém <img> e <video> (o feitiço usa vídeo do mago), então não
+   vira background-image de CSS. */
 .card-art {
-  position: relative;
-  isolation: isolate;
-  flex: 1;
-  min-height: 0;
-  margin: 6px 0 0;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
+  background: var(--card-background);
+  border: 0;
+}
+
+/* Efeito prismático sutil sobre a arte da carta. Elemento próprio
+   (`.card-prism`), NÃO um pseudo de `.card-art`: ::before/::after dela já são o
+   cooldown — reaproveitá-los quebra o preenchimento do cooldown (ver
+   CardFace.test). Fica acima da arte (z-index 0) mas abaixo do véu (z-index 1).
+   Usa a cor do tier (--card-accent) em gradação translúcida e animação lenta de
+   rotação de matiz para não roubar foco. pointer-events: none deixa o
+   clique/toque passar. O animation-duration é longo (18s) para ser quase
+   imperceptível. */
+.card-prism {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background:
-    radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--card-accent) 30%, transparent), transparent 65%),
-    linear-gradient(180deg, rgba(54, 69, 84, 0.38), rgba(7, 12, 22, 0.58));
-  border: 1px solid rgba(255, 255, 255, 0.08);
+    linear-gradient(135deg, color-mix(in srgb, var(--card-accent) 18%, transparent) 0%, transparent 50%),
+    linear-gradient(45deg, transparent 50%, color-mix(in srgb, var(--card-accent) 18%) 100%);
+  mix-blend-mode: overlay;
+  opacity: 0.11;
+  animation: prismatic-rotate 18s ease infinite;
+}
+
+@keyframes prismatic-rotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Véu para o texto continuar legível sobre a arte.
+   Elemento próprio, não pseudo-elemento: `.hand-card::after` já pertence ao
+   brilho de hover (e é `display: none` nas cartas do tabuleiro), e
+   `.card-art::before/::after` pertencem ao cooldown. */
+.card-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(5, 9, 17, 0.82) 0%, rgba(5, 9, 17, 0.34) 16%, transparent 34%),
+    linear-gradient(0deg, rgba(5, 9, 17, 0.92) 0%, rgba(5, 9, 17, 0.66) 26%, rgba(5, 9, 17, 0.18) 54%, transparent 74%);
+  pointer-events: none;
 }
 
 .card-art img,
@@ -1729,8 +1899,7 @@ body.card-modal-open {
 .board-row .hand-card.cooldown-active .card-art img,
 .board-row .hand-card.cooldown-active .card-art video {
   filter:
-    saturate(calc(0.68 + var(--cooldown-charge, 0) * 0.42))
-    brightness(calc(0.82 + var(--cooldown-charge, 0) * 0.18));
+    saturate(calc(0.68 + var(--cooldown-charge, 0) * 0.42)) brightness(calc(0.82 + var(--cooldown-charge, 0) * 0.18));
 }
 
 .board-row .hand-card.cooldown-active .card-art::before,
@@ -1746,11 +1915,9 @@ body.card-modal-open {
 .card-art::before {
   bottom: 0;
   height: var(--cooldown-progress, 0%);
-  background: linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0.34),
-    rgba(255, 255, 255, 0.08)
-  );
+  background: linear-gradient(0deg,
+      rgba(255, 255, 255, 0.34),
+      rgba(255, 255, 255, 0.08));
   mix-blend-mode: screen;
 }
 
@@ -1771,17 +1938,17 @@ body.card-modal-open {
 
 .card-type {
   position: relative;
-  z-index: 1;
-  margin-top: -1px;
+  z-index: 2;
+  margin-top: auto;
   padding: 3px;
   color: #d9d9e7;
-  font: 700 7px/1 monospace;
+  font: 700 12px/1 monospace;
   background: linear-gradient(90deg, transparent, rgba(10, 12, 20, 0.96) 15% 85%, transparent);
 }
 
 .card-level {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   align-self: center;
   padding: 2px 5px;
   color: #f2e8c8;
@@ -1792,6 +1959,8 @@ body.card-modal-open {
 }
 
 .card-stats {
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: space-around;
   padding: 5px 2px;
@@ -1825,10 +1994,22 @@ body.card-modal-open {
 }
 
 @media (max-width: 520px) {
+
   .board-owner-badge,
   .phase-next {
-    width: 32px;
+    width: 52px;
     min-height: 50px;
+  }
+
+  .board-owner-badge img {
+    width: 48px;
+    height: 48px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .board-owner-label {
+    font-size: 8px;
   }
 
   .board-owner-badge {
@@ -1932,7 +2113,7 @@ body.card-modal-open {
   }
 
   .card-header {
-    font-size: 7px;
+    font-size: 14px;
   }
 
   .card-description {
@@ -1960,10 +2141,10 @@ body.card-modal-open {
 
   .player-slot .hand-card {
     animation: none;
-    transform: translate(-50%, -53%) translateZ(38px);
+    transform: translate(-50%, -53%);
   }
 
-  .effect-pop-active > .card-effect-pop {
+  .effect-pop-active>.card-effect-pop {
     animation-duration: 1ms;
   }
 
@@ -1979,6 +2160,7 @@ body.card-modal-open {
     animation: none;
   }
 }
+
 /* =========================================================================
  * Menu de entrada e telas auxiliares (melhorias; não fazem parte do boargame)
  * ========================================================================= */
@@ -2107,63 +2289,158 @@ a.menu-note {
   overflow: hidden;
 }
 
-/* Feixe que mostra a trajetória do projétil */
+/* Feixe que mostra a trajetória do projétil. Cor/espessura vêm do VFX da carta
+   (variáveis --vfx-*), com fallback no laranja de fogo. */
 .projectile-beam {
   position: fixed;
-  height: 3px;
+  height: var(--vfx-thickness, 3px);
   transform-origin: left center;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 120, 70, 0) 0%,
-    rgba(255, 150, 90, 0.35) 30%,
-    rgba(255, 90, 50, 0.7) 85%,
-    rgba(255, 240, 200, 0.95) 100%
-  );
-  box-shadow: 0 0 8px 1px rgba(255, 110, 60, 0.6);
+  background: linear-gradient(90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--vfx-color, #ff6a32) 40%, transparent) 30%,
+      var(--vfx-color, #ff6a32) 85%,
+      #fff 100%);
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--vfx-color, #ff6a32) 65%, transparent);
   opacity: 0;
-  filter: blur(0.5px);
+  /* O blur configurado também suaviza a trajetória (feixe). */
+  filter: blur(calc(var(--vfx-blur, 0px) + 0.5px));
   animation-name: projectile-beam-fade;
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
 }
 
 @keyframes projectile-beam-fade {
-  0% { opacity: 0; }
-  14% { opacity: 0.9; }
-  78% { opacity: 0.55; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  14% {
+    opacity: 0.9;
+  }
+
+  78% {
+    opacity: 0.55;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
-/* Orbe que viaja da carta até a badge */
+/* Orbe que viaja da carta até a badge. Tamanho, cor, brilho e blur vêm do VFX
+   da carta (variáveis --vfx-*), editáveis no painel. */
 .projectile-orb {
   position: fixed;
   top: 0;
   left: 0;
-  width: 16px;
-  height: 16px;
-  margin: -8px 0 0 -8px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 34%, #fff 0 22%, #ffd08a 40%, #ff6a2c 64%, #d41d1d 100%);
-  box-shadow:
-    0 0 10px 3px rgba(255, 120, 60, 0.95),
-    0 0 22px 8px rgba(255, 50, 40, 0.55);
+  width: var(--vfx-size, 16px);
+  height: var(--vfx-size, 16px);
+  margin: calc(var(--vfx-size, 16px) / -2) 0 0 calc(var(--vfx-size, 16px) / -2);
+  /* Blur no container + brilho via drop-shadow. A FORMA vai no ::before: se o
+     clip-path ficasse no próprio orbe, ele recortaria o resultado já borrado e
+     a borda voltaria a ficar nítida. Com o blur no container, ele suaviza a
+     forma recortada do ::before — então o blur vale para todas as formas. */
+  filter:
+    blur(var(--vfx-blur, 0px))
+    drop-shadow(0 0 calc(var(--vfx-glow, 12px) * 0.7) color-mix(in srgb, var(--vfx-color, #ff6a2c) 90%, transparent))
+    drop-shadow(0 0 calc(var(--vfx-glow, 12px) * 1.5) color-mix(in srgb, var(--vfx-color, #ff6a2c) 45%, transparent));
   will-change: transform;
 }
 
-/* Rastro/cauda do orbe apontando para trás (sentido oposto ao voo) */
+/* Corpo/ponta do orbe. A forma geométrica é aplicada aqui (clip-path/raio). */
+.projectile-orb::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%,
+      #fff 0 18%,
+      color-mix(in srgb, var(--vfx-color, #ff6a2c) 55%, #fff) 38%,
+      var(--vfx-color, #ff6a2c) 66%,
+      color-mix(in srgb, var(--vfx-color, #ff6a2c) 55%, #000) 100%);
+}
+
+/* Rastro/cauda do orbe apontando para trás (sentido oposto ao voo). */
 .projectile-orb::after {
   content: "";
   position: absolute;
   top: 50%;
   right: 50%;
-  width: 42px;
-  height: 5px;
+  width: calc(var(--vfx-size, 16px) * 2.4);
+  height: calc(var(--vfx-thickness, 5px));
   transform: translateY(-50%) rotate(var(--angle, 0deg));
   transform-origin: right center;
-  background: linear-gradient(90deg, rgba(255, 90, 40, 0) 0%, rgba(255, 110, 60, 0.85) 100%);
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--vfx-color, #ff6a32) 85%, transparent) 100%);
   border-radius: 3px;
   filter: blur(1px);
   pointer-events: none;
+}
+
+/* ---- Forma geométrica da ponta (aplicada no ::before do orbe) ---------------
+   A forma recorta só o corpo (::before); o blur/brilho ficam no container e
+   suavizam a silhueta recortada — por isso o blur funciona em todas as formas. */
+.projectile-shape--square::before {
+  border-radius: 0;
+}
+
+.projectile-shape--diamond::before {
+  border-radius: 0;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.projectile-shape--triangle::before {
+  border-radius: 0;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.projectile-shape--star::before {
+  border-radius: 0;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+/* ---- Variações por motion (as cores/tamanhos vêm das variáveis --vfx-*) ----- */
+
+/* Rastro do projétil (curva): fantasmas que seguem a trajetória e dissipam. */
+.projectile-trail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(var(--vfx-size, 16px) * 0.78);
+  height: calc(var(--vfx-size, 16px) * 0.78);
+  margin: calc(var(--vfx-size, 16px) * -0.39) 0 0 calc(var(--vfx-size, 16px) * -0.39);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+      color-mix(in srgb, var(--vfx-color, #b65cff) 90%, #fff) 0%,
+      var(--vfx-color, #b65cff) 45%,
+      transparent 74%);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--vfx-color, #b65cff) 45%, transparent);
+  filter: blur(calc(var(--vfx-blur, 2px) + 1px));
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* MELEE: corte que surge na badge. O orbe vira um traço (comprimento = tamanho,
+   altura = espessura). */
+.projectile-orb--melee {
+  width: var(--vfx-size, 118px);
+  height: var(--vfx-thickness, 16px);
+  margin: calc(var(--vfx-thickness, 16px) / -2) 0 0 calc(var(--vfx-size, 118px) / -2);
+}
+
+/* O corpo do corte (o brilho/blur vêm do container, como nos demais). */
+.projectile-orb--melee::before {
+  border-radius: 999px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--vfx-color, #ffe8c4) 25%, transparent) 18%,
+      #fff 50%,
+      color-mix(in srgb, var(--vfx-color, #ffe8c4) 35%, transparent) 80%,
+      transparent 100%);
+}
+
+/* O melee não tem rastro de orbe. */
+.projectile-orb--melee::after {
+  content: none;
 }
 
 /* Impacto na badge: tremor + flash vermelho */
@@ -2185,25 +2462,116 @@ a.menu-note {
 }
 
 @keyframes badge-hit-shake {
-  0%, 100% { translate: 0 0; }
-  12% { translate: -5px 0; }
-  28% { translate: 4px 0; }
-  44% { translate: -4px 0; }
-  60% { translate: 3px 0; }
-  76% { translate: -2px 0; }
-  88% { translate: 1px 0; }
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  12% {
+    translate: -5px 0;
+  }
+
+  28% {
+    translate: 4px 0;
+  }
+
+  44% {
+    translate: -4px 0;
+  }
+
+  60% {
+    translate: 3px 0;
+  }
+
+  76% {
+    translate: -2px 0;
+  }
+
+  88% {
+    translate: 1px 0;
+  }
 }
 
 @keyframes badge-hit-flash {
-  0% { opacity: 0; }
-  18% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Cura aplicada: a badge pisca em verde brilhante com blur. */
+.board-owner-badge.is-healed {
+  animation: badge-heal-pulse 740ms ease-out;
+}
+
+.board-owner-badge.is-healed::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: 4;
+  border-top-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  background: radial-gradient(circle, rgba(130, 255, 175, 0.9), rgba(40, 220, 120, 0.4) 55%, transparent 72%);
+  box-shadow: 0 0 28px 10px rgba(80, 255, 150, 0.85);
+  filter: blur(6px);
+  pointer-events: none;
+  animation: badge-heal-flash 740ms ease-out;
+}
+
+@keyframes badge-heal-flash {
+  0% {
+    opacity: 0;
+  }
+
+  26% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes badge-heal-pulse {
+
+  0%,
+  100% {
+    filter: none;
+  }
+
+  30% {
+    filter: drop-shadow(0 0 12px rgba(90, 255, 150, 0.95)) brightness(1.22);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .projectile-beam { animation-duration: 1ms !important; }
-  .board-owner-badge.is-hit { animation-duration: 1ms; }
-  .board-owner-badge.is-hit::after { animation-duration: 160ms; }
+  .projectile-beam {
+    animation-duration: 1ms !important;
+  }
+
+  .board-owner-badge.is-hit {
+    animation-duration: 1ms;
+  }
+
+  .board-owner-badge.is-hit::after {
+    animation-duration: 160ms;
+  }
+
+  .board-owner-badge.is-healed {
+    animation-duration: 1ms;
+  }
+
+  .board-owner-badge.is-healed::after {
+    animation-duration: 200ms;
+  }
 }
 
 /* =========================================================================
@@ -2326,8 +2694,17 @@ a.menu-note {
 }
 
 @keyframes fog-label-pulse {
-  0%, 100% { opacity: 0.72; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.06); }
+
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
 }
 
 /* Overlay fixo da névoa */
@@ -2355,19 +2732,22 @@ a.menu-note {
   position: absolute;
   inset: -20% -40%;
   opacity: 0.16;
-  background: repeating-linear-gradient(
-    8deg,
-    rgba(224, 198, 150, 0) 0 42px,
-    rgba(224, 198, 150, 0.55) 60px,
-    rgba(224, 198, 150, 0) 92px
-  );
+  background: repeating-linear-gradient(8deg,
+      rgba(224, 198, 150, 0) 0 42px,
+      rgba(224, 198, 150, 0.55) 60px,
+      rgba(224, 198, 150, 0) 92px);
   filter: blur(6px);
   animation: fog-drift-move 3.6s linear infinite;
 }
 
 @keyframes fog-drift-move {
-  from { transform: translateX(-12%); }
-  to { transform: translateX(12%); }
+  from {
+    transform: translateX(-12%);
+  }
+
+  to {
+    transform: translateX(12%);
+  }
 }
 
 /* Vendaval: rajadas varrem a tela uma vez ao ativar */
@@ -2381,35 +2761,70 @@ a.menu-note {
   left: -40%;
   width: 70%;
   height: 90px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(242, 222, 182, 0.0) 8%,
-    rgba(242, 222, 182, 0.55) 50%,
-    rgba(255, 245, 220, 0.2) 70%,
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(242, 222, 182, 0.0) 8%,
+      rgba(242, 222, 182, 0.55) 50%,
+      rgba(255, 245, 220, 0.2) 70%,
+      transparent);
   filter: blur(3px);
   opacity: 0;
   animation: fog-gust-sweep 1.1s cubic-bezier(0.3, 0.1, 0.2, 1) forwards;
 }
 
-.fog-streak:nth-child(1) { top: 14%; height: 70px; animation-delay: 0ms; }
-.fog-streak:nth-child(2) { top: 36%; height: 120px; animation-delay: 90ms; }
-.fog-streak:nth-child(3) { top: 58%; height: 80px; animation-delay: 40ms; }
-.fog-streak:nth-child(4) { top: 76%; height: 110px; animation-delay: 150ms; }
+.fog-streak:nth-child(1) {
+  top: 14%;
+  height: 70px;
+  animation-delay: 0ms;
+}
+
+.fog-streak:nth-child(2) {
+  top: 36%;
+  height: 120px;
+  animation-delay: 90ms;
+}
+
+.fog-streak:nth-child(3) {
+  top: 58%;
+  height: 80px;
+  animation-delay: 40ms;
+}
+
+.fog-streak:nth-child(4) {
+  top: 76%;
+  height: 110px;
+  animation-delay: 150ms;
+}
 
 @keyframes fog-gust-sweep {
-  0% { transform: translateX(0) skewX(-14deg); opacity: 0; }
-  14% { opacity: 0.9; }
-  100% { transform: translateX(210%) skewX(-14deg); opacity: 0; }
+  0% {
+    transform: translateX(0) skewX(-14deg);
+    opacity: 0;
+  }
+
+  14% {
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateX(210%) skewX(-14deg);
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fog-drift { animation: none; }
-  .fog-streak { animation-duration: 1ms; }
+  .fog-drift {
+    animation: none;
+  }
+
+  .fog-streak {
+    animation-duration: 1ms;
+  }
+
   .fog-label-pulse,
-  .fog-timer-label { animation: none; }
+  .fog-timer-label {
+    animation: none;
+  }
 }
 
 /* =========================================================================
@@ -2503,18 +2918,36 @@ a.menu-note {
 }
 
 @keyframes fog-line-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0.25; }
+
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0.25;
+  }
 }
 
 @keyframes fog-spark {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.7); }
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.7);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .fog-timer--active .fog-timer-track,
-  .fog-timer--active .fog-timer-track::after { animation: none; }
+  .fog-timer--active .fog-timer-track::after {
+    animation: none;
+  }
 }
 
 /* =========================================================================
@@ -2522,63 +2955,52 @@ a.menu-note {
  * ========================================================================= */
 
 .tier-D {
-  --card-accent: #e0b579;
+  --card-accent: #fe9400;
   --card-background:
     linear-gradient(155deg, rgba(205, 155, 90, 0.28), transparent 36%),
     linear-gradient(150deg, #3a2c1c, #241a12 55%, #17110b);
 }
+
 .tier-C {
   --card-accent: #e8eef6;
   --card-background:
     linear-gradient(155deg, rgba(207, 214, 222, 0.3), transparent 36%),
     linear-gradient(150deg, #39414b, #232a31 55%, #171b20);
 }
+
 .tier-B {
-  --card-accent: #ffd964;
+  --card-accent: #ffd700;
   --card-background:
     linear-gradient(155deg, rgba(244, 206, 84, 0.34), transparent 36%),
     linear-gradient(150deg, #4a3c17, #2e2611 55%, #1b160a);
 }
+
 .tier-A {
-  --card-accent: #9fe8ff;
+  --card-accent: #00c3ff;
   --card-background:
     linear-gradient(155deg, rgba(127, 220, 255, 0.3), transparent 36%),
     linear-gradient(150deg, #1d3d4a, #162a33 55%, #0f1b22);
 }
+
 .tier-S {
-  --card-accent: #6bf0ad;
+  --card-accent: #01ff80;
   --card-background:
     linear-gradient(155deg, rgba(85, 240, 162, 0.3), transparent 36%),
     linear-gradient(150deg, #16402e, #0f2a20 55%, #0a1b15);
 }
+
 .tier-SS {
-  --card-accent: #c9a3ff;
+  --card-accent: #700aff;
   --card-background:
     linear-gradient(155deg, rgba(179, 136, 255, 0.4), transparent 40%),
     linear-gradient(150deg, #2a1840, #1a1030 55%, #0d0718);
 }
+
 .hand-card.tier-SS {
   box-shadow:
     inset 0 0 0 1px rgba(201, 163, 255, 0.5),
     0 0 16px rgba(160, 110, 255, 0.4),
     0 10px 26px rgba(0, 0, 0, 0.6);
-}
-
-.card-tier-badge {
-  position: absolute;
-  top: 29px;
-  left: 5px;
-  z-index: 3;
-  display: grid;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  place-items: center;
-  color: #0c0f14;
-  font: 900 10px/1 monospace;
-  background: var(--card-accent, #ccc);
-  border-radius: 6px 0 6px 0;
-  box-shadow: 0 0 8px color-mix(in srgb, var(--card-accent, #ccc) 55%, transparent);
 }
 
 .joker-rack {
@@ -2591,6 +3013,7 @@ a.menu-note {
   gap: 7px;
   transform: translateY(-50%);
 }
+
 .joker-slot {
   display: grid;
   width: 60px;
@@ -2603,9 +3026,11 @@ a.menu-note {
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
+
 .joker-slot.is-empty {
   opacity: 0.5;
 }
+
 .joker-slot.is-filled {
   border-color: var(--card-accent, #fff);
   background:
@@ -2614,19 +3039,30 @@ a.menu-note {
   box-shadow: 0 0 10px color-mix(in srgb, var(--card-accent) 45%, transparent);
   cursor: pointer;
 }
+
 .joker-slot.is-filled:disabled {
   cursor: not-allowed;
   filter: saturate(0.7) brightness(0.85);
 }
+
 .joker-slot.is-armed {
   outline: 2px solid #fff;
   outline-offset: 2px;
   animation: joker-armed 0.8s ease-in-out infinite;
 }
+
 @keyframes joker-armed {
-  0%, 100% { box-shadow: 0 0 10px color-mix(in srgb, var(--card-accent) 50%, transparent); }
-  50% { box-shadow: 0 0 20px 4px color-mix(in srgb, var(--card-accent) 80%, transparent); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px color-mix(in srgb, var(--card-accent) 50%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 4px color-mix(in srgb, var(--card-accent) 80%, transparent);
+  }
 }
+
 .joker-star {
   position: absolute;
   font-size: 11px;
@@ -2634,6 +3070,7 @@ a.menu-note {
   opacity: 0.85;
   transform: translateY(-11px);
 }
+
 .joker-tier {
   font: 900 15px/1 monospace;
   color: var(--card-accent, #fff);
@@ -2648,13 +3085,14 @@ a.menu-note {
 }
 
 .board-owner-badge.is-gambler {
-  border-color: #ffd964;
-  box-shadow: 0 0 14px rgba(255, 217, 100, 0.5), inset 0 1px rgba(255, 255, 255, 0.16);
+  --badge-accent: #ffd964;
 }
+
 .phase-next.phase-spin {
   border-color: #ffd964;
   color: #ffe9a3;
 }
+
 .phase-next.phase-spin:hover {
   background: linear-gradient(160deg, #6a5620, #2a2210);
   box-shadow: 0 0 16px rgba(255, 217, 100, 0.55);
@@ -2663,6 +3101,7 @@ a.menu-note {
 .opponent-offers.is-roulette {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+
 .roulette-reel {
   position: relative;
   display: grid;
@@ -2675,34 +3114,42 @@ a.menu-note {
   border-radius: 4px;
   box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.6);
 }
+
 .roulette-reel-mark {
   font: 900 40px/1 monospace;
   color: rgba(255, 217, 100, 0.55);
   text-shadow: 0 0 12px rgba(255, 180, 40, 0.5);
 }
+
 .roulette-reel.is-spinning .roulette-strip {
   position: absolute;
   inset: -150% 0;
-  background: repeating-linear-gradient(
-    0deg,
-    #cd9b5a 0 16%,
-    #cfd6de 16% 33%,
-    #f4ce54 33% 50%,
-    #7fdcff 50% 66%,
-    #55f0a2 66% 83%,
-    #b388ff 83% 100%
-  );
+  background: repeating-linear-gradient(0deg,
+      #cd9b5a 0 16%,
+      #cfd6de 16% 33%,
+      #f4ce54 33% 50%,
+      #7fdcff 50% 66%,
+      #55f0a2 66% 83%,
+      #b388ff 83% 100%);
   opacity: 0.85;
   filter: blur(1px);
   animation: reel-spin 0.35s linear infinite;
 }
+
 @keyframes reel-spin {
-  from { transform: translateY(0); }
-  to { transform: translateY(33.33%); }
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(33.33%);
+  }
 }
+
 .roulette-reel.is-revealed {
   border-color: var(--card-accent, #ffd964);
 }
+
 .roulette-reel.is-revealed .hand-card {
   position: relative;
   inset: auto;
@@ -2714,20 +3161,38 @@ a.menu-note {
   transform: none;
   transition: transform 160ms ease;
 }
+
 .roulette-reel.is-pickable {
   cursor: pointer;
 }
+
 .roulette-reel.is-pickable:hover .hand-card {
   transform: translateY(-4px) scale(1.03);
 }
+
 .roulette-reel.is-locked {
   cursor: default;
   opacity: 0.55;
 }
-.opponent-offers.is-roulette .card-header { font-size: clamp(6px, 0.48vw, 8px); }
-.opponent-offers.is-roulette .card-stats { font-size: clamp(9px, 0.7vw, 12px); }
-.opponent-offers.is-roulette .card-type { font-size: clamp(6px, 0.42vw, 7px); }
-.opponent-offers.is-roulette .card-tier-badge { top: 24px; }
+
+.opponent-offers.is-roulette .card-header {
+  font-size: clamp(6px, 0.48vw, 8px);
+}
+
+.opponent-offers.is-roulette .card-stats {
+  font-size: clamp(9px, 0.7vw, 12px);
+}
+
+.opponent-offers.is-roulette .card-type {
+  font-size: clamp(6px, 0.42vw, 7px);
+}
+
+/* O selo saiu do posicionamento absoluto, então o ajuste de `top` da roleta
+   (que o empurrava para baixo do cabeçalho) não se aplica mais. */
+.opponent-offers.is-roulette .card-tier-badge {
+  height: 17px;
+  font-size: 9px;
+}
 
 .merge-modal {
   position: fixed;
@@ -2739,6 +3204,7 @@ a.menu-note {
   background: rgba(3, 5, 12, 0.82);
   backdrop-filter: blur(8px);
 }
+
 .merge-panel {
   width: min(100%, 420px);
   padding: clamp(22px, 4vw, 36px);
@@ -2750,27 +3216,35 @@ a.menu-note {
   border-bottom-right-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.68);
 }
+
 .merge-eyebrow {
   margin: 0;
   color: #c6c8d2;
   font: 800 11px/1.2 monospace;
   letter-spacing: 0.22em;
 }
+
 .merge-panel h2 {
   margin: 10px 0;
   font: 900 clamp(22px, 4vw, 32px)/1 monospace;
 }
+
 .merge-message {
   margin: 0 0 22px;
   color: #d7d5e0;
   font: 15px/1.5 system-ui, sans-serif;
 }
-.merge-message strong { color: #ffe36e; }
+
+.merge-message strong {
+  color: #ffe36e;
+}
+
 .merge-actions {
   display: flex;
   gap: 12px;
   justify-content: center;
 }
+
 .merge-confirm,
 .merge-cancel {
   min-height: 42px;
@@ -2780,16 +3254,19 @@ a.menu-note {
   cursor: pointer;
   border-radius: 6px;
 }
+
 .merge-confirm {
   color: #111722;
   background: linear-gradient(145deg, #fff, #cfd8e4);
   border: 1px solid #fff;
 }
+
 .merge-cancel {
   color: #e7e4f4;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.28);
 }
+
 .battle-result-panel.is-run-victory {
   border-color: #a8dc79;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 34px rgba(120, 203, 113, 0.3);
@@ -2813,7 +3290,8 @@ a.menu-note {
   display: flex;
   justify-self: center;
   width: min(100%, 220px);
-  height: 100%;
+  height: 70%;
+  margin-top: 35px;
   min-height: 0;
   flex-direction: column;
   align-items: center;
@@ -2824,15 +3302,16 @@ a.menu-note {
   text-align: center;
   cursor: pointer;
   background: linear-gradient(155deg, rgba(30, 39, 48, 0.92), rgba(9, 13, 20, 0.95));
-  border: 1px solid var(--shop-accent, rgba(255, 255, 255, 0.5));
-  border-top-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border: 3px solid var(--shop-accent, rgba(255, 255, 255, 0.5));
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
   box-shadow:
     inset 0 1px rgba(255, 255, 255, 0.12),
     0 0 10px color-mix(in srgb, var(--shop-accent, #fff) 30%, transparent),
     0 6px 14px rgba(0, 0, 0, 0.45);
   transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
 }
+
 .shop-card:hover {
   transform: translateY(-6px);
   filter: brightness(1.12);
@@ -2841,6 +3320,7 @@ a.menu-note {
     0 0 20px color-mix(in srgb, var(--shop-accent, #fff) 60%, transparent),
     0 10px 20px rgba(0, 0, 0, 0.5);
 }
+
 .shop-card-icon {
   display: grid;
   width: 54px;
@@ -2853,21 +3333,34 @@ a.menu-note {
   border-radius: 50%;
   text-shadow: 0 0 10px color-mix(in srgb, var(--shop-accent, #fff) 70%, transparent);
 }
+
 .shop-card-name {
-  font: 900 15px/1.2 monospace;
-  letter-spacing: 0.08em;
+  font: 900 22px/1.2 monospace;
+  letter-spacing: 0.01em;
   color: #fff;
 }
+
 .shop-card-count {
   font: 700 11px/1 monospace;
   letter-spacing: 0.06em;
   color: color-mix(in srgb, var(--shop-accent, #fff) 80%, #fff);
 }
 
-.shop-dano { --shop-accent: #ff6a5a; }
-.shop-cura { --shop-accent: #6ddf8f; }
-.shop-haste { --shop-accent: #f5b74e; }
-.shop-escudo { --shop-accent: #68d8ff; }
+.shop-dano {
+  --shop-accent: #ff6a5a;
+}
+
+.shop-cura {
+  --shop-accent: #6ddf8f;
+}
+
+.shop-haste {
+  --shop-accent: #f5b74e;
+}
+
+.shop-escudo {
+  --shop-accent: #68d8ff;
+}
 
 /* Botao VOLTAR (abaixo do AVANCAR, so dentro de uma loja) */
 .phase-next.phase-back {
@@ -2875,6 +3368,7 @@ a.menu-note {
   border-color: rgba(255, 180, 180, 0.7);
   color: #ffd9d9;
 }
+
 .phase-next.phase-back:hover {
   background: linear-gradient(160deg, #5a2e2e, #241414);
   box-shadow: 0 0 14px rgba(255, 140, 140, 0.45);
@@ -2897,23 +3391,23 @@ img {
   user-drag: none;
 }
 
-/* Cursor de "pegar" nos elementos arrastaveis */
-.hand-card,
-.offer-tile,
-.shop-card,
-.player-slot .hand-card {
-  cursor: grab;
+/* Cursor único do app: a seta customizada em todos os elementos, substituindo
+   grab/grabbing/pointer. Hotspot no canto superior-esquerdo (a ponta da seta).
+   Campos de texto mantêm o cursor de texto para a usabilidade do editor. */
+:root {
+  --app-cursor: url("/cursors/game-cursor-48.png") 2 2, auto;
 }
 
-.hand-card.is-dragging-source,
-.offer-tile.is-dragging-source {
-  cursor: grabbing;
+*,
+*::before,
+*::after {
+  cursor: var(--app-cursor) !important;
 }
 
-/* Enquanto arrasta, mao fechada em tudo */
-body.dragging,
-body.dragging * {
-  cursor: grabbing !important;
+input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+textarea,
+[contenteditable="true"] {
+  cursor: text !important;
 }
 
 /* =========================================================================
@@ -2926,6 +3420,7 @@ body.dragging * {
   z-index: 1390;
   pointer-events: none;
 }
+
 .synergy-line {
   position: fixed;
   height: 4px;
@@ -2935,23 +3430,32 @@ body.dragging * {
   border-radius: 3px;
   animation: synergy-pulse 1.4s ease-in-out infinite;
 }
+
 @keyframes synergy-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .card-synergy-badge {
   position: absolute;
-  top: 50px;
-  left: 5px;
+  top: 6px;
+  left: 43%;
   z-index: 3;
-  padding: 1px 5px;
+  padding: 4px 10px;
   color: #0c140f;
-  font: 800 9px/1.4 monospace;
+  font: 800 11px/1.4 monospace;
   background: #78f0b0;
-  border-radius: 0 6px 0 6px;
+  border-radius: 5px;
   box-shadow: 0 0 8px rgba(90, 230, 150, 0.6);
 }
+
 .opponent-offers.is-combat-board .card-synergy-badge,
 .opponent-offers.is-roulette .card-synergy-badge {
   top: 42px;
@@ -2964,6 +3468,7 @@ body.dragging * {
     0 0 14px rgba(90, 230, 150, 0.5),
     0 10px 26px rgba(0, 0, 0, 0.55);
 }
+
 .hand-card.is-synergy-buffed .card-stat-value {
   color: #8dffbe;
   text-shadow: 0 0 8px rgba(90, 230, 150, 0.9);
@@ -2987,16 +3492,19 @@ body.dragging * {
     radial-gradient(ellipse at 50% 0%, rgba(60, 80, 130, 0.25), transparent 55%),
     #060509;
 }
+
 .mage-select-header {
   text-align: center;
   margin-bottom: 26px;
 }
+
 .mage-select-eyebrow {
   margin: 0;
   color: #8aa0c6;
   font: 800 11px/1.3 monospace;
   letter-spacing: 0.3em;
 }
+
 .mage-select-title {
   margin: 8px 0 0;
   font: 900 clamp(30px, 5vw, 52px)/1 monospace;
@@ -3010,6 +3518,7 @@ body.dragging * {
   max-width: 1100px;
   margin: 0 auto 36px;
 }
+
 .mage-pick {
   display: flex;
   flex-direction: column;
@@ -3024,26 +3533,32 @@ body.dragging * {
   border-bottom-right-radius: 12px;
   transition: transform 140ms ease, box-shadow 140ms ease;
 }
+
 .mage-pick:hover {
   transform: translateY(-4px);
 }
+
 .mage-pick.is-selected {
   border-color: var(--accent, #fff);
   box-shadow: 0 0 22px color-mix(in srgb, var(--accent, #fff) 55%, transparent);
 }
+
 .mage-pick-theme {
   color: var(--accent, #fff);
   font: 800 11px/1 monospace;
   letter-spacing: 0.18em;
 }
+
 .mage-pick-name {
   font: 900 26px/1 monospace;
   letter-spacing: 0.04em;
 }
+
 .mage-pick-spec {
   color: var(--accent, #fff);
   font: 800 12px/1.2 monospace;
 }
+
 .mage-pick-blurb {
   color: #c4c8d4;
   font: 500 13px/1.45 system-ui, sans-serif;
@@ -3057,11 +3572,13 @@ body.dragging * {
   max-width: 1100px;
   margin: 0 auto 16px;
 }
+
 .mage-deck-head h2 {
   margin: 0;
   font: 900 18px/1 monospace;
   letter-spacing: 0.08em;
 }
+
 .mage-start {
   min-height: 46px;
   padding: 0 26px;
@@ -3075,6 +3592,15 @@ body.dragging * {
   border-bottom-right-radius: 10px;
   box-shadow: 0 0 18px color-mix(in srgb, var(--accent, #fff) 45%, transparent);
 }
+
+.mage-start.is-loading {
+  padding-right: 26px;
+}
+
+.mage-start.is-loading .ui-spinner {
+  right: 7px;
+}
+
 .mage-start:hover {
   filter: brightness(1.08);
 }
@@ -3092,6 +3618,7 @@ body.dragging * {
   perspective: 700px;
   cursor: pointer;
 }
+
 .tilt-card .hand-card {
   position: relative;
   inset: auto;
@@ -3103,9 +3630,11 @@ body.dragging * {
   transition: transform 120ms ease;
   will-change: transform;
 }
+
 .tilt-card .hand-card:hover {
   transform: translateZ(0) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
 }
+
 .hand-card.is-specialty {
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.5),
@@ -3124,6 +3653,7 @@ body.dragging * {
   color: #eef2ff;
   font-family: monospace;
 }
+
 .home-bg {
   position: absolute;
   inset: 0;
@@ -3133,6 +3663,7 @@ body.dragging * {
   filter: blur(3px) brightness(0.7) saturate(1.1);
   transform: scale(1.08);
 }
+
 .home-overlay {
   position: absolute;
   inset: 0;
@@ -3149,6 +3680,7 @@ body.dragging * {
   text-align: center;
   transform: translateX(-50%);
 }
+
 .ascii-title {
   margin: 0;
   font: 700 clamp(6px, 1.05vw, 15px)/1 monospace;
@@ -3160,10 +3692,19 @@ body.dragging * {
   filter: drop-shadow(0 0 14px rgba(90, 140, 255, 0.6));
   animation: ascii-glow 3s ease-in-out infinite;
 }
+
 @keyframes ascii-glow {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(90, 140, 255, 0.5)); }
-  50% { filter: drop-shadow(0 0 22px rgba(120, 170, 255, 0.95)); }
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(90, 140, 255, 0.5));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 22px rgba(120, 170, 255, 0.95));
+  }
 }
+
 .home-tagline {
   margin: 14px 0 0;
   color: #9fb4e0;
@@ -3182,6 +3723,96 @@ body.dragging * {
   gap: 10px;
   transform: translateY(-50%);
 }
+
+.home-menu>button {
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home-profile {
+  position: absolute;
+  left: clamp(28px, 6vw, 110px);
+  top: 140px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(84vw, 400px);
+  color: #eaf0ff;
+}
+
+.home-profile-mage {
+  cursor: pointer;
+  transition: transform 120ms ease;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border: 4px solid color-mix(in srgb, var(--profile-accent) 72%, white);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--profile-accent) 32%, transparent);
+}
+
+.home-profile-mage:hover {
+  transform: scale(1.08);
+}
+
+.home-profile-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-profile-eyebrow {
+  color: #9fb4e0;
+  font: 800 9px/1 monospace;
+  letter-spacing: .2em;
+}
+
+.home-profile-copy strong {
+  max-width: 190px;
+  overflow: hidden;
+  color: #f2f4fb;
+  font: 900 22px/1.1 monospace;
+  letter-spacing: .05em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-profile-copy small {
+  color: var(--profile-accent, #c3e83f);
+  font: 800 16px/1 monospace;
+  letter-spacing: .1em;
+}
+
+.home-profile-action {
+  align-self: flex-start;
+  padding: 6px 8px;
+  margin-top: 6px;
+  border: 1px solid rgba(150, 170, 220, .36);
+  color: #c4c8d4;
+  background: rgba(14, 18, 30, .68);
+  font: 800 15px/1 monospace;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+
+.home-profile-action:hover {
+  border-color: #c3e83f;
+  color: #d6ff5a;
+}
+
+.home-profile-error {
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+  color: #ff9b9b;
+  font: 11px/1.2 system-ui, sans-serif;
+}
+
 .home-item {
   display: flex;
   align-items: center;
@@ -3195,20 +3826,24 @@ body.dragging * {
   border-left: 3px solid rgba(150, 170, 220, 0.55);
   transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
 }
+
 .home-item:hover {
   transform: translateX(6px);
   border-left-color: #c3e83f;
   background: linear-gradient(90deg, rgba(24, 30, 46, 0.96), rgba(24, 30, 46, 0.6));
 }
+
 .home-item-label {
   font: 900 22px/1 monospace;
   letter-spacing: 0.06em;
 }
+
 .home-item-sub {
   color: #9fb4e0;
   font: 700 11px/1 monospace;
   letter-spacing: 0.08em;
 }
+
 .home-item-tag {
   min-width: 22px;
   padding: 3px 7px;
@@ -3218,26 +3853,32 @@ body.dragging * {
   background: #c3e83f;
   border-radius: 4px;
 }
+
 .home-item--play {
   border-left-color: #c3e83f;
   background: linear-gradient(90deg, rgba(120, 170, 40, 0.32), rgba(14, 18, 30, 0.5));
 }
+
 .home-item--play .home-item-label {
   color: #d6ff5a;
 }
+
 .home-item.is-disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 .home-item.is-disabled:hover {
   transform: none;
   border-left-color: rgba(150, 170, 220, 0.55);
   background: linear-gradient(90deg, rgba(14, 18, 30, 0.86), rgba(14, 18, 30, 0.5));
 }
+
 .home-item.is-disabled .home-item-tag {
   background: #555b68;
   color: #cdd3df;
 }
+
 .home-footer {
   position: absolute;
   right: 18px;
@@ -3251,6 +3892,7 @@ body.dragging * {
 .mage-select-header {
   position: relative;
 }
+
 .mage-back {
   position: absolute;
   left: 0;
@@ -3259,6 +3901,7 @@ body.dragging * {
   font: 700 12px/1 monospace;
   text-decoration: none;
 }
+
 .mage-back:hover {
   color: #fff;
 }
@@ -3279,6 +3922,7 @@ body.dragging * {
   transform: scale(1.08);
   pointer-events: none;
 }
+
 .app-bg-overlay {
   position: fixed;
   inset: 0;
@@ -3287,6 +3931,13 @@ body.dragging * {
   background:
     linear-gradient(90deg, rgba(4, 6, 14, 0.9) 0%, rgba(4, 6, 14, 0.5) 46%, rgba(4, 6, 14, 0.24) 100%),
     radial-gradient(ellipse at 50% 16%, transparent 36%, rgba(2, 3, 8, 0.78) 100%);
+}
+
+/* Variante escurecida para o jogo (o tabuleiro precisa de contraste) */
+.app-bg-overlay.is-dim {
+  background:
+    linear-gradient(180deg, rgba(2, 3, 8, 0.84) 0%, rgba(2, 3, 8, 0.72) 42%, rgba(2, 3, 8, 0.94) 100%),
+    radial-gradient(ellipse at 50% 44%, rgba(2, 3, 8, 0.35), rgba(2, 3, 8, 0.9) 100%);
 }
 
 /* Fonte de titulos */
@@ -3307,6 +3958,7 @@ body.dragging * {
   text-align: right;
   transform: translateY(-50%);
 }
+
 .home-maggi {
   margin: 0;
   font-weight: 800;
@@ -3316,6 +3968,7 @@ body.dragging * {
   color: #f4f7ff;
   text-shadow: 0 0 34px rgba(120, 160, 255, 0.45), 0 6px 30px rgba(0, 0, 0, 0.6);
 }
+
 .home-version {
   margin: 12px 0 0;
   color: #9fb4e0;
@@ -3327,15 +3980,18 @@ body.dragging * {
 .mage-select {
   background: transparent;
 }
+
 .mage-select-title {
   font-weight: 800;
   letter-spacing: 0.02em;
 }
+
 .mage-deck-head h2,
 .mage-pick-name {
   font-weight: 700;
   letter-spacing: 0.01em;
 }
+
 .mage-pick-name {
   font-size: 30px;
 }
@@ -3358,10 +4014,7 @@ body.dragging * {
   cursor: pointer;
   transform-style: preserve-3d;
   transform:
-    translate(var(--fe-tx, 0), var(--fe-ty, 0))
-    scale(var(--fe-scale, 1))
-    rotateX(var(--fe-rx, 0deg))
-    rotateY(var(--fe-ry, 0deg));
+    translate(var(--fe-tx, 0), var(--fe-ty, 0)) scale(var(--fe-scale, 1)) rotateX(var(--fe-rx, 0deg)) rotateY(var(--fe-ry, 0deg));
   transition: transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 220ms ease;
   will-change: transform;
 }
@@ -3383,6 +4036,7 @@ body.dragging * {
   transform: none;
   pointer-events: none;
 }
+
 .fisheye-item .hand-card:hover {
   transform: none;
 }
@@ -3398,6 +4052,7 @@ body.dragging * {
   max-width: 1320px;
   margin: 0 auto;
 }
+
 /* Descrição do mago, entre a badge e os botões (dentro da sidebar) */
 .mage-blurb {
   position: relative;
@@ -3438,14 +4093,17 @@ body.dragging * {
   border-bottom-right-radius: 12px;
   transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
 }
+
 .mage-badge:hover {
   transform: translateX(5px);
 }
+
 .mage-badge.is-selected {
   border-color: var(--accent, #fff);
   background: linear-gradient(160deg, rgba(40, 46, 62, 0.9), rgba(12, 14, 22, 0.94));
   box-shadow: 0 0 22px color-mix(in srgb, var(--accent, #fff) 50%, transparent);
 }
+
 .mage-badge-face {
   display: block;
   width: 56px;
@@ -3456,17 +4114,20 @@ body.dragging * {
   border-radius: 46% 46% 46% 10px;
   box-shadow: 0 0 10px color-mix(in srgb, var(--accent, #fff) 40%, transparent);
 }
+
 .mage-badge-face img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .mage-badge-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 }
+
 .mage-badge-name {
   font-family: var(--font-display), "Bodoni Moda", Georgia, serif;
   font-size: 20px;
@@ -3474,11 +4135,13 @@ body.dragging * {
   line-height: 1;
   letter-spacing: 0.02em;
 }
+
 .mage-badge-theme {
   color: var(--accent, #fff);
   font: 800 10px/1.2 monospace;
   letter-spacing: 0.12em;
 }
+
 .mage-badge-spec {
   color: #aab4c8;
   font: 700 10px/1.2 monospace;
@@ -3489,6 +4152,7 @@ body.dragging * {
   flex: 1;
   min-width: 0;
 }
+
 .mage-deck-head {
   display: flex;
   align-items: center;
@@ -3496,6 +4160,7 @@ body.dragging * {
   gap: 16px;
   margin: 0 0 8px;
 }
+
 .mage-deck-name {
   margin: 0;
   font-family: var(--font-display), "Bodoni Moda", Georgia, serif;
@@ -3503,18 +4168,20 @@ body.dragging * {
   font-weight: 700;
   color: #fff;
 }
+
 .mage-deck-blurb {
   margin: 4px 0 0;
   max-width: 60ch;
   color: #c4c8d4;
   font: 500 13px/1.45 system-ui, sans-serif;
 }
+
 .mage-start {
   display: inline-block;
   min-height: 46px;
   padding: 14px 26px;
   color: #0c1118;
-  font: 900 14px/1 monospace;
+  font: 900 30px/1 monospace;
   letter-spacing: 0.08em;
   text-decoration: none;
   cursor: pointer;
@@ -3525,12 +4192,21 @@ body.dragging * {
   box-shadow: 0 0 18px color-mix(in srgb, var(--accent, #fff) 45%, transparent);
 }
 
+.mage-start.is-loading {
+  padding-right: 26px;
+}
+
+.mage-start.is-loading .ui-spinner {
+  right: 7px;
+}
+
 /* Fisheye: colunas menores (deck ao lado da sidebar) + opacidade nas bordas */
 .fisheye {
   grid-template-columns: repeat(4, minmax(200px, 1fr));
   gap: 8px 12px;
   max-width: none;
 }
+
 .fisheye-item {
   opacity: var(--fe-op, 1);
 }
@@ -3557,10 +4233,12 @@ body.dragging * {
   backdrop-filter: blur(4px);
   transition: transform 120ms ease, border-color 120ms ease;
 }
+
 .music-toggle:hover {
   transform: scale(1.08);
   border-color: #c3e83f;
 }
+
 .music-toggle.is-muted {
   opacity: 0.7;
 }
@@ -3580,17 +4258,59 @@ body.dragging * {
 }
 
 /* Badge do mago atual: a ARTE do mago e o fundo do card (full-bleed) */
+/* Wrapper: deixa a camada pop-out transbordar por cima da moldura. */
 .mage-current {
+  position: relative;
+  margin-top: 44px; /* espaço para a cabeça saltar acima */
+  overflow: visible;
+}
+
+/* A moldura (dome-top) recorta o retrato-base e segura o texto. */
+.mage-current-frame {
   position: relative;
   display: flex;
   height: 240px;
   align-items: flex-end;
   overflow: hidden;
   border: 2px solid var(--accent, #fff);
-  border-top-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+  border-top-left-radius: 80px;
+  border-top-right-radius: 80px;
   box-shadow: 0 0 24px color-mix(in srgb, var(--accent, #fff) 45%, transparent);
 }
+
+/* Camada que salta acima da moldura. Máscara radial esconde as bordas
+   retangulares e o fundo, deixando aparecer o topo-centro (a cabeça). Como é a
+   MESMA imagem da base, a parte que encosta na moldura combina sem emenda. */
+.mage-current-pop {
+  position: absolute;
+  left: 50%;
+  top: -44px;
+  z-index: 3;
+  width: 86%;
+  height: 150%;
+  object-fit: cover;
+  object-position: center 18%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.55));
+  -webkit-mask-image: radial-gradient(ellipse 58% 64% at 50% 34%, #000 52%, rgba(0, 0, 0, 0.35) 70%, transparent 82%);
+  mask-image: radial-gradient(ellipse 58% 64% at 50% 34%, #000 52%, rgba(0, 0, 0, 0.35) 70%, transparent 82%);
+}
+
+/* Recorte real (PNG transparente): sem máscara, personagem inteiro ancorado na
+   base da moldura, com a cabeça saltando acima. */
+.mage-current-pop.is-cutout {
+  top: auto;
+  bottom: -2%;
+  width: 96%;
+  height: 172%;
+  object-fit: contain;
+  object-position: center bottom;
+  -webkit-mask-image: none;
+  mask-image: none;
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.6));
+}
+
 .mage-current-bg {
   position: absolute;
   inset: 0;
@@ -3598,39 +4318,47 @@ body.dragging * {
   height: 100%;
   object-fit: cover;
 }
+
 .mage-current-grad {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(6, 8, 16, 0.12) 0%,
-    rgba(6, 8, 16, 0.05) 42%,
-    rgba(6, 8, 16, 0.72) 78%,
-    rgba(6, 8, 16, 0.92) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(6, 8, 16, 0.12) 0%,
+      rgba(6, 8, 16, 0.05) 42%,
+      rgba(6, 8, 16, 0.72) 78%,
+      rgba(6, 8, 16, 0.92) 100%);
 }
+
 .mage-current-text {
-  position: relative;
-  z-index: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Acima do recorte (que salta por cima, z-index 3): o nome fica na frente. */
+  z-index: 5;
   display: flex;
-  width: 100%;
   flex-direction: column;
   align-items: center;
   gap: 4px;
   padding: 14px 16px 16px;
   text-align: center;
+  pointer-events: none;
 }
+
 .mage-current-name {
   font-family: var(--font-display), "Bodoni Moda", Georgia, serif;
   font-size: 30px;
   font-weight: 800;
   color: #fff;
+  text-shadow: 0 2px 10px #000, 0 0 18px rgba(0, 0, 0, 0.8);
 }
+
 .mage-current-theme {
   color: var(--accent, #fff);
   font: 800 11px/1 monospace;
   letter-spacing: 0.2em;
 }
+
 .mage-current-spec {
   color: #aab4c8;
   font: 700 11px/1 monospace;
@@ -3643,15 +4371,18 @@ body.dragging * {
   flex-direction: column;
   gap: 10px;
 }
+
 .mage-item.is-selected {
   border-color: var(--accent, #fff);
   border-left-color: var(--accent, #fff);
   background: linear-gradient(90deg, color-mix(in srgb, var(--accent, #fff) 26%, rgba(14, 18, 30, 0.9)), rgba(14, 18, 30, 0.55));
   box-shadow: 0 0 16px color-mix(in srgb, var(--accent, #fff) 40%, transparent);
 }
+
 .mage-item.is-selected .home-item-label {
   color: #fff;
 }
+
 .mage-item:hover {
   border-left-color: var(--accent, #fff);
 }
@@ -3661,18 +4392,21 @@ body.dragging * {
   flex: 1;
   min-width: 0;
 }
+
 .mage-deck-area .mage-deck-blurb {
   margin: 4px 0 16px;
   max-width: 70ch;
   color: #c4c8d4;
   font: 500 14px/1.5 system-ui, sans-serif;
 }
+
 .deck-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   perspective: 1200px;
 }
+
 .deck-grid .tilt-card .hand-card {
   height: 300px;
 }
@@ -3682,20 +4416,20 @@ body.dragging * {
   width: clamp(320px, 44vw, 700px);
   height: auto;
   margin-left: auto;
-  filter: drop-shadow(0 0 30px rgba(120, 160, 255, 0.35)) drop-shadow(0 8px 26px rgba(0, 0, 0, 0.55));
+  filter:
+    brightness(1.12) drop-shadow(0 0 14px rgba(210, 225, 255, 0.28)) drop-shadow(0 0 32px rgba(120, 160, 255, 0.42)) drop-shadow(0 8px 26px rgba(0, 0, 0, 0.55)) blur(0.35px);
 }
 
 /* Prévia de design dos magos: sem tier ou indicação de carta inicial. */
 .hand-card.card-design-preview {
   --card-accent: #c2cad4;
   --card-background: linear-gradient(155deg, #30343a, #1c1f24 54%, #111317);
-  border-color: rgba(196, 204, 214, 0.48);
+  border-color: color-mix(in srgb, var(--card-accent) 58%, transparent);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.08),
     0 10px 26px rgba(0, 0, 0, 0.55);
 }
 
-.card-design-preview .card-tier-badge,
 .card-design-preview .card-level {
   display: none;
 }
@@ -3726,6 +4460,100 @@ body.fullscreen-prompt-open {
   border-left: 3px solid #c3e83f;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 36px rgba(120, 160, 255, 0.12);
   animation: fullscreen-prompt-rise 280ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.auth-modal-overlay {
+  z-index: 5100;
+  overflow-y: auto;
+}
+
+.auth-modal-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-modal-panel .fullscreen-prompt-copy {
+  margin: 0 0 4px;
+}
+
+.auth-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 2px 6px;
+  border: 0;
+  color: #9fb4e0;
+  background: transparent;
+  font: 32px/1 monospace;
+  cursor: pointer;
+}
+
+.auth-modal-close:hover {
+  color: #d6ff5a;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #9fb4e0;
+  font: 800 10px/1.3 monospace;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.auth-field input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid rgba(150, 170, 220, .34);
+  border-radius: 0;
+  outline: none;
+  color: #eaf0ff;
+  background: rgba(14, 18, 30, .84);
+  font: 14px/1.3 monospace;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.auth-field input:focus {
+  border-color: #c3e83f;
+  box-shadow: 0 0 0 1px rgba(195, 232, 63, .25);
+}
+
+.auth-field small {
+  color: #8f99b1;
+  font: 11px/1.3 system-ui, sans-serif;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.auth-modal-panel .fullscreen-prompt-actions {
+  margin-top: 6px;
+}
+
+.auth-mode-switch {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.auth-modal-notice {
+  margin: 0;
+  color: #d6ff5a;
+  font: 12px/1.45 system-ui, sans-serif;
+}
+
+.mage-start-error {
+  margin: 8px 0 0;
+  color: #ff9b9b;
+  font: 12px/1.4 system-ui, sans-serif;
+}
+
+.mage-start:disabled {
+  opacity: .65;
+  cursor: wait;
 }
 
 .fullscreen-prompt-eyebrow {
@@ -3779,13 +4607,70 @@ body.fullscreen-prompt-open {
 }
 
 @keyframes fullscreen-prompt-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fullscreen-prompt-rise {
-  from { opacity: 0; transform: translateY(12px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 680px) {
+  .home-menu {
+    left: 20px;
+    top: 48%;
+    width: calc(100vw - 40px);
+  }
+
+  .home-item {
+    padding: 12px 14px;
+  }
+
+  .home-item-label {
+    font-size: clamp(15px, 4vw, 20px);
+  }
+
+  .home-profile {
+    left: 20px;
+    bottom: 24px;
+    max-width: calc(100vw - 40px);
+  }
+
+  .home-profile-action {
+    margin-left: auto;
+  }
+
+  .home-title-side {
+    top: 6%;
+    right: 20px;
+    transform: none;
+  }
+
+  .home-logo {
+    width: min(42vw, 240px);
+  }
+
+  .home-version {
+    margin-top: 4px;
+    font-size: 8px;
+  }
+
+  .home-footer {
+    display: none;
+  }
 }
 
 /* Barra de rolagem discreta e flat, igual em Chromium e Firefox. */
@@ -3814,6 +4699,7 @@ body.fullscreen-prompt-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .fullscreen-prompt,
   .fullscreen-prompt-panel {
     animation-duration: 1ms;
@@ -3861,7 +4747,7 @@ body.fullscreen-prompt-open {
 }
 
 .balance-header p,
-.balance-login > p {
+.balance-login>p {
   color: #aaa69d;
   font-size: 14px;
 }
@@ -3940,7 +4826,7 @@ body.fullscreen-prompt-open {
   cursor: not-allowed;
 }
 
-.balance-patch-bar > .balance-field {
+.balance-patch-bar>.balance-field {
   flex: 1 1 230px;
 }
 
@@ -4009,6 +4895,11 @@ body.fullscreen-prompt-open {
 .balance-error {
   border-color: rgba(198, 79, 66, .45);
   color: #f0a39a;
+}
+
+.balance-warning {
+  border-color: rgba(205, 164, 74, .45);
+  color: #f0cf8e;
 }
 
 .balance-success {
@@ -4170,7 +5061,7 @@ body.fullscreen-prompt-open {
   gap: 15px;
 }
 
-.balance-editor-grid > .balance-field:last-child {
+.balance-editor-grid>.balance-field:last-child {
   grid-column: 1 / -1;
 }
 
@@ -4321,7 +5212,7 @@ body.fullscreen-prompt-open {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .balance-editor-grid > .balance-field:last-child {
+  .balance-editor-grid>.balance-field:last-child {
     grid-column: auto;
   }
 
@@ -4366,7 +5257,7 @@ body.fullscreen-prompt-open {
 }
 
 .balance-header p,
-.balance-login > p {
+.balance-login>p {
   color: #c4c8d4;
   font: 14px/1.55 system-ui, sans-serif;
 }
@@ -4582,4 +5473,1940 @@ body.fullscreen-prompt-open {
   .balance-brand-logo {
     width: min(52vw, 190px);
   }
+}
+
+/* =========================================================================
+ * Spinner de carregamento (botões com API ou navegação)
+ * ========================================================================= */
+
+.ui-spinner {
+  display: inline-block;
+  flex: none;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(150, 170, 220, .32);
+  border-top-color: #c3e83f;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: ui-spinner-rotate 640ms linear infinite;
+}
+
+@keyframes ui-spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Botão em espera: o spinner é ancorado à direita e a faixa dele é reservada
+   no padding, então o rótulo não muda de lugar. Vale tanto para os botões flex
+   do menu (justify-content: space-between) quanto para os centralizados de
+   tela cheia, que não são flex. */
+.is-loading {
+  position: relative;
+  padding-right: 30px;
+  cursor: progress;
+}
+
+.is-loading .ui-spinner {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.is-loading> :first-child {
+  opacity: .7;
+  transition: opacity .18s ease;
+}
+
+/* Link de texto curto: a faixa reservada pro spinner é menor para não esticar
+   o link. */
+.mage-back.is-loading,
+.menu-note.is-loading {
+  padding-right: 24px;
+}
+
+.mage-back.is-loading .ui-spinner,
+.menu-note.is-loading .ui-spinner {
+  right: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-spinner {
+    animation-duration: 1800ms;
+  }
+}
+
+/* =========================================================================
+ * Aba de SONS: abas do painel, biblioteca, bindings e preview
+ * ========================================================================= */
+
+.balance-tabs {
+  max-width: 1500px;
+  margin: 0 auto 18px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid rgba(150, 170, 220, .18);
+}
+
+.balance-tab {
+  padding: 11px 24px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: #9fb4e0;
+  background: transparent;
+  font: 800 12px/1 monospace;
+  letter-spacing: .18em;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.balance-tab:hover {
+  color: #c4c8d4;
+}
+
+.balance-tab.is-selected {
+  color: #d6ff5a;
+  border-bottom-color: #c3e83f;
+}
+
+.balance-audio-workspace {
+  max-width: 1500px;
+  min-height: 520px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(270px, 340px) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.balance-sound-list,
+.balance-audio-workspace .balance-editor {
+  min-height: 520px;
+}
+
+.balance-sound-list {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.balance-new-sound {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.balance-sound-thumb {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border: 1px solid rgba(150, 170, 220, .3);
+  color: #9fb4e0;
+  font-size: 18px;
+}
+
+.balance-editor-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.balance-sound-audio {
+  margin: 14px 0 8px;
+  padding: 12px;
+  border: 1px solid rgba(150, 170, 220, .22);
+  background: linear-gradient(90deg, rgba(14, 18, 30, .72), rgba(14, 18, 30, .3));
+}
+
+.balance-sound-audio audio {
+  width: 100%;
+  height: 38px;
+}
+
+.balance-admin .balance-danger {
+  border-color: rgba(255, 120, 120, .4);
+  color: #ff9b9b;
+}
+
+.balance-admin .balance-danger:hover:not(:disabled) {
+  border-color: rgba(255, 120, 120, .7);
+  color: #ffc9c9;
+}
+
+.balance-editor-hint {
+  color: #9fb4e0;
+  font: 11px/1.6 system-ui, sans-serif;
+}
+
+.balance-bindings {
+  max-width: 1500px;
+  margin: 18px auto 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.balance-scope-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.balance-scope-tab {
+  padding: 7px 16px;
+  border: 1px solid rgba(150, 170, 220, .24);
+  color: #9fb4e0;
+  background: transparent;
+  font: 700 10px/1 monospace;
+  letter-spacing: .14em;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.balance-scope-tab:hover {
+  color: #c4c8d4;
+}
+
+.balance-scope-tab.is-selected {
+  color: #d6ff5a;
+  border-color: #c3e83f;
+}
+
+.balance-binding-group {
+  border-top: 1px solid rgba(150, 170, 220, .14);
+}
+
+.balance-binding-group h3 {
+  padding: 13px 15px 7px;
+  color: #9fb4e0;
+  font: 800 10px/1.3 monospace;
+  letter-spacing: .16em;
+}
+
+.balance-binding-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.balance-binding-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.4fr) minmax(150px, 1fr) 150px 150px auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 15px;
+  border-top: 1px solid rgba(150, 170, 220, .1);
+}
+
+.balance-binding-row.is-off {
+  opacity: .5;
+}
+
+.balance-binding-copy {
+  min-width: 0;
+}
+
+.balance-binding-copy strong {
+  display: block;
+  color: #f2f4fb;
+  font: 700 12px/1.3 monospace;
+  letter-spacing: .05em;
+}
+
+.balance-binding-copy small {
+  display: block;
+  margin-top: 3px;
+  color: #9fb4e0;
+  font: 11px/1.4 system-ui, sans-serif;
+}
+
+.balance-binding-sound {
+  min-width: 0;
+}
+
+.balance-binding-slider {
+  display: grid;
+  gap: 5px;
+}
+
+.balance-binding-slider span {
+  color: #9fb4e0;
+  font: 700 9px/1 monospace;
+  letter-spacing: .1em;
+}
+
+.balance-binding-slider input {
+  width: 100%;
+  accent-color: #c3e83f;
+}
+
+.balance-admin .balance-test {
+  padding: 8px 14px;
+  font-size: 9px;
+}
+
+.balance-admin .balance-test:disabled {
+  opacity: .4;
+}
+
+@media (max-width: 1100px) {
+  .balance-audio-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .balance-binding-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* Botoes AVANCAR/VOLTAR: altura reduzida em 40% (100px -> 60px) */
+.phase-next {
+  min-height: 60px;
+}
+
+/* =========================================================================
+ * Arte do vendedor como fundo da carta da loja (novo)
+ * ========================================================================= */
+
+.shop-card {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  justify-content: flex-end;
+}
+
+.shop-card-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.shop-card-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      rgba(4, 6, 12, 0.08) 0%,
+      rgba(4, 6, 12, 0.04) 42%,
+      rgba(4, 6, 12, 0.82) 80%,
+      rgba(4, 6, 12, 0.96) 100%);
+}
+
+/* Dica flutuante do vendedor: variação de .card-tip só com nome e descrição. */
+.seller-tip .card-tip-head {
+  margin-bottom: 2px;
+}
+
+/* =========================================================================
+ * Novas fases: intro, animacao de entrada, aventura, escolha de NPC, versus
+ * ========================================================================= */
+
+/* Tabuleiro "surge" a cada troca de fase */
+.scene.is-entering {
+  animation: board-rise 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Anima só opacidade e deslocamento (propriedade `translate`) para NÃO
+   sobrescrever o rotateX do tabuleiro (transform fica inline, fixo). */
+@keyframes board-rise {
+  0% {
+    opacity: 0;
+    translate: 0 9%;
+  }
+
+  100% {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* Banner de introducao de fase */
+.phase-intro {
+  position: fixed;
+  top: 13%;
+  left: 50%;
+  z-index: 1700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: intro-pop 1.9s ease both;
+}
+
+.phase-intro-pass {
+  font: 800 11px/1 monospace;
+  letter-spacing: 0.3em;
+  color: #9fb4e0;
+}
+
+.phase-intro-title {
+  font-size: clamp(40px, 7vw, 92px);
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(120, 160, 255, 0.5), 0 6px 20px rgba(0, 0, 0, 0.8);
+}
+
+.phase-intro-sub {
+  font: 700 13px/1 monospace;
+  letter-spacing: 0.14em;
+  color: #e3e9f6;
+}
+
+.intro-market .phase-intro-title {
+  text-shadow: 0 0 30px rgba(120, 220, 120, 0.5), 0 6px 20px #000;
+}
+
+.intro-adventure .phase-intro-title {
+  text-shadow: 0 0 30px rgba(255, 210, 90, 0.55), 0 6px 20px #000;
+}
+
+.intro-bot .phase-intro-title {
+  text-shadow: 0 0 30px rgba(255, 90, 90, 0.5), 0 6px 20px #000;
+}
+
+.intro-player .phase-intro-title {
+  text-shadow: 0 0 30px rgba(120, 170, 255, 0.6), 0 6px 20px #000;
+}
+
+@keyframes intro-pop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.92);
+  }
+
+  12% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-12px);
+  }
+}
+
+/* Cartas de aventura (3 situacoes) */
+.adventure-card {
+  position: relative;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  color: #f1eefb;
+  text-align: center;
+  cursor: pointer;
+  background: linear-gradient(155deg, rgba(30, 34, 46, 0.92), rgba(9, 13, 20, 0.96));
+  border: 1px solid var(--a, rgba(255, 255, 255, 0.45));
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--a, #fff) 20%, transparent);
+  transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+}
+
+.adv-card {
+  --a: #9fe8ff;
+}
+
+.adv-maxhp {
+  --a: #ff7a7a;
+}
+
+.adv-joker {
+  --a: #ffd964;
+}
+
+.adventure-card.is-pickable:hover {
+  transform: translateY(-6px);
+  filter: brightness(1.12);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--a, #fff) 55%, transparent);
+}
+
+.adventure-card.is-locked {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.adv-icon {
+  display: grid;
+  width: 60px;
+  height: 60px;
+  place-items: center;
+  font-size: 30px;
+  color: var(--a, #fff);
+  background: radial-gradient(circle, color-mix(in srgb, var(--a, #fff) 28%, transparent), transparent 70%);
+  border: 1px solid var(--a, #fff);
+  border-radius: 50%;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--a, #fff) 70%, transparent);
+}
+
+.adv-title {
+  font: 900 16px/1.1 monospace;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.adv-desc {
+  max-width: 24ch;
+  color: #c9cedb;
+  font: 500 12px/1.4 system-ui, sans-serif;
+}
+
+/* Escolha de NPC (3 oponentes) */
+.npc-card {
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: flex-end;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.npc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 22px rgba(255, 120, 90, 0.5);
+}
+
+.npc-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+}
+
+.npc-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 6, 12, 0.08) 40%, rgba(4, 6, 12, 0.92) 100%);
+}
+
+.npc-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px;
+  text-align: center;
+}
+
+.npc-name {
+  font: 900 14px/1.1 monospace;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 1px 4px #000;
+}
+
+.npc-go {
+  font: 800 10px/1 monospace;
+  letter-spacing: 0.1em;
+  color: #ffce6b;
+}
+
+/* Modal de versus (fase de player) */
+.versus {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background-color: #000;
+  animation: versus-in 320ms ease;
+}
+
+@keyframes versus-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.versus-side {
+  position: relative;
+  overflow: hidden;
+}
+
+.versus-side img {
+  position: absolute;
+  inset: 0;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.versus-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2, 3, 8, 0.1) 42%, rgba(2, 3, 8, 0.92) 100%);
+}
+
+.versus-left {
+  box-shadow: inset 0 0 120px rgba(2, 3, 8, 0.6);
+}
+
+.versus-meta {
+  position: absolute;
+  bottom: 12%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.versus-role {
+  padding: 4px 14px;
+  color: var(--accent, #d9dee8);
+  font: 800 11px/1 monospace;
+  letter-spacing: 0.22em;
+  background: rgba(8, 10, 18, 0.7);
+  border: 1px solid color-mix(in srgb, var(--accent, #fff) 55%, rgba(255, 255, 255, 0.3));
+  border-radius: 4px;
+}
+
+.versus-name {
+  font-size: clamp(28px, 4vw, 56px);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 12px #000;
+}
+
+.versus-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 clamp(6px, 2vw, 24px);
+}
+
+.versus-x {
+  font-size: clamp(60px, 9vw, 140px);
+  color: #ffd964;
+  filter: drop-shadow(0 0 22px rgba(255, 200, 60, 0.85));
+}
+
+.versus-vs {
+  font-size: clamp(22px, 3vw, 40px);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 10px #000;
+}
+
+.versus-start {
+  position: fixed;
+  bottom: 7%;
+  left: 50%;
+  z-index: 2;
+  min-height: 54px;
+  padding: 0 clamp(40px, 6vw, 72px);
+  color: #000;
+  font: 900 18px/1 monospace;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 26px rgba(195, 232, 63, 0.55);
+  transform: translateX(-50%);
+  transition: filter 120ms ease;
+}
+
+.versus-start:hover {
+  filter: brightness(1.08);
+}
+
+/* Botões centralizados de tela cheia: o padding lateral já é largo, então o
+   spinner cabe dentro dele. O padding é fixado explicitamente porque o
+   `.is-loading` genérico mudaria a largura — e com o texto centralizado, isso
+   deslocaria o rótulo. */
+.versus-start.is-loading {
+  padding-right: clamp(40px, 6vw, 72px);
+}
+
+.versus-start.is-loading .ui-spinner {
+  right: 26px;
+}
+
+/* =========================================================================
+ * Modal de seleção de mago no menu principal (abre ao clicar no retrato).
+ * Reaproveita o overlay .fullscreen-prompt; estilo alinhado à home.
+ * ========================================================================= */
+
+/* O retrato do perfil vira botão sem alterar a aparência da imagem. */
+.home-profile-mage-btn {
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  line-height: 0;
+  overflow: visible;
+}
+
+.home-profile-mage-btn:hover .home-profile-mage {
+  transform: translateY(-3px) scale(1.03);
+}
+
+/* Recorte do mago saltando acima do badge redondo do perfil. */
+.home-profile-cutout {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 2;
+  width: 150%;
+  height: 158%;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateX(-50%);
+  pointer-events: none;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.6));
+  transition: transform 120ms ease;
+}
+
+.home-profile-mage-btn:hover .home-profile-cutout {
+  transform: translateX(-50%) translateY(-4px) scale(1.04);
+}
+
+.mage-picker-overlay {
+  z-index: 5100;
+  overflow-y: auto;
+}
+
+.mage-picker-panel {
+  position: relative;
+  width: min(100%, 920px);
+}
+
+.mage-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+
+@media (max-width: 560px) {
+  .mage-picker-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+.mage-picker-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-height: 230px;
+  margin-top: 34px; /* espaço para o recorte saltar acima */
+  padding: 18px 14px 16px;
+  overflow: visible;
+  background: linear-gradient(160deg, rgba(26, 30, 42, 0.72), rgba(10, 12, 18, 0.78));
+  border: 1px solid rgba(150, 170, 220, 0.2);
+  border-top: 3px solid color-mix(in srgb, var(--profile-accent, #c3e83f) 70%, white);
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+/* Moldura interna que recorta o vídeo de fundo (o card em si transborda). */
+.mage-picker-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Vídeo de fundo do mago (preenche o botão, esmaecido). */
+.mage-picker-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  filter: saturate(1.05);
+  transition: opacity 160ms ease, transform 200ms ease;
+}
+
+/* Recorte (PNG): salta acima do card, personagem ancorado na base. */
+.mage-picker-cutout {
+  position: absolute;
+  left: 50%;
+  top: -34px;
+  z-index: 2;
+  width: 94%;
+  height: calc(100% + 34px);
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateX(-50%);
+  pointer-events: none;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.6));
+  transition: transform 160ms ease;
+}
+
+.mage-picker-card:hover .mage-picker-cutout,
+.mage-picker-card:focus-visible .mage-picker-cutout {
+  transform: translateX(-50%) translateY(-4px) scale(1.03);
+}
+
+.mage-picker-grad {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg,
+      rgba(6, 8, 14, 0.35) 0%,
+      rgba(6, 8, 14, 0.2) 45%,
+      rgba(6, 8, 14, 0.82) 85%,
+      rgba(6, 8, 14, 0.95) 100%);
+}
+
+.mage-picker-card:hover,
+.mage-picker-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  border-color: color-mix(in srgb, var(--profile-accent, #c3e83f) 60%, white);
+}
+
+.mage-picker-card:hover .mage-picker-bg,
+.mage-picker-card:focus-visible .mage-picker-bg {
+  opacity: 0.8;
+  transform: scale(1.04);
+}
+
+.mage-picker-card.is-selected {
+  border-color: var(--profile-accent, #c3e83f);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--profile-accent, #c3e83f) 32%, transparent);
+}
+
+.mage-picker-portrait {
+  position: relative;
+  z-index: 2;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border: 4px solid color-mix(in srgb, var(--profile-accent, #c3e83f) 72%, white);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--profile-accent, #c3e83f) 30%, transparent);
+}
+
+.mage-picker-name {
+  position: relative;
+  z-index: 3;
+  color: #f2f4fb;
+  font: 900 16px/1.1 monospace;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.mage-picker-theme {
+  color: #9fb4e0;
+  font: 600 10px/1.2 monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* =========================================================================
+ * Placar de líderes (/leaderboard)
+ * ========================================================================= */
+.leaderboard-page {
+  position: relative;
+  min-height: 100vh;
+  padding: clamp(24px, 5vw, 56px);
+  color: #eaf0ff;
+}
+
+.leaderboard-header {
+  max-width: 760px;
+  margin: 0 auto 22px;
+}
+
+.leaderboard-eyebrow {
+  margin: 14px 0 6px;
+  color: #9fb4e0;
+  font: 800 10px/1.3 monospace;
+  letter-spacing: 0.24em;
+}
+
+.leaderboard-title {
+  margin: 0;
+  color: #f2f4fb;
+  font: 900 clamp(26px, 5vw, 40px)/1 monospace;
+  letter-spacing: 0.04em;
+}
+
+.leaderboard-note {
+  margin: 8px 0 0;
+  color: #c3e83f;
+  font: 600 12px/1.4 monospace;
+  letter-spacing: 0.08em;
+}
+
+.leaderboard-panel {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 10px;
+  background: linear-gradient(155deg, rgba(30, 34, 46, 0.9), rgba(8, 10, 16, 0.94));
+  border: 1px solid rgba(150, 170, 220, 0.28);
+  border-left: 3px solid #c3e83f;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.leaderboard-empty {
+  padding: 40px 16px;
+  color: #c4c8d4;
+  font: 14px/1.5 system-ui, sans-serif;
+  text-align: center;
+}
+
+.leaderboard-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 92px 120px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(150, 170, 220, 0.12);
+}
+
+.leaderboard-row:last-child {
+  border-bottom: 0;
+}
+
+.leaderboard-row--head {
+  color: #9fb4e0;
+  font: 800 10px/1 monospace;
+  letter-spacing: 0.16em;
+}
+
+.leaderboard-row.is-top {
+  border-left: 3px solid var(--accent, #c3e83f);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent, #c3e83f) 12%, transparent), transparent 60%);
+}
+
+.lb-rank {
+  font: 900 20px/1 monospace;
+  color: #f2f4fb;
+  text-align: center;
+}
+
+.is-top-1 .lb-rank {
+  color: #ffd964;
+}
+
+.is-top-2 .lb-rank {
+  color: #d4dced;
+}
+
+.is-top-3 .lb-rank {
+  color: #e8a15a;
+}
+
+.lb-player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.lb-mage {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent, #c3e83f) 72%, white);
+  flex: none;
+}
+
+.lb-player-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lb-player-text strong {
+  color: #f2f4fb;
+  font: 800 15px/1.2 monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lb-player-text small {
+  color: #9fb4e0;
+  font: 600 10px/1.2 monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.lb-victories {
+  font: 900 22px/1 monospace;
+  color: var(--accent, #c3e83f);
+  text-align: center;
+}
+
+.lb-status {
+  text-align: right;
+}
+
+.lb-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  color: #9fb4e0;
+  font: 800 9px/1 monospace;
+  letter-spacing: 0.1em;
+  background: rgba(150, 170, 220, 0.1);
+  border: 1px solid rgba(150, 170, 220, 0.25);
+  border-radius: 4px;
+}
+
+.lb-badge--win {
+  color: #0c0f14;
+  background: #c3e83f;
+  border-color: #c3e83f;
+}
+
+/* Build final do jogador, abaixo da linha do placar.
+   A linha é um grid de 4 colunas; o grid da build ocupa a largura toda, numa
+   segunda linha, alinhado com a coluna do jogador. */
+.leaderboard-build {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 640px;
+  margin: 10px 0 4px 58px;
+}
+
+/* Wrapper de cada carta: contém o tooltip, então apontá-lo não fecha a dica. */
+.leaderboard-build-slot {
+  position: relative;
+  min-width: 0;
+}
+
+.leaderboard-build .hand-card {
+  position: relative;
+  inset: auto;
+  left: auto;
+  bottom: auto;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1.36;
+  padding: 6px;
+  transform: none;
+  cursor: default;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.leaderboard-build .hand-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(225, 229, 242, 0.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 14px 30px rgba(0, 0, 0, 0.6);
+}
+
+.leaderboard-build-empty {
+  display: block;
+  aspect-ratio: 1 / 1.36;
+  border: 1px dashed rgba(150, 170, 220, 0.22);
+  border-radius: 2px;
+  background: rgba(14, 18, 30, 0.35);
+}
+
+/* Tooltip da carta no placar. Abre ACIMA da carta; `z-index` acima da linha. */
+.card-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  z-index: 30;
+  width: 272px;
+  padding: 11px 13px;
+  color: #e9e8f5;
+  text-align: left;
+  background: linear-gradient(180deg, rgba(18, 22, 34, 0.99), rgba(9, 11, 18, 0.99));
+  border: 1px solid color-mix(in srgb, var(--tip-accent, #c3e83f) 45%, transparent);
+  border-radius: 3px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.72);
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: card-tip-in 120ms ease-out;
+}
+
+@keyframes card-tip-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Dica flutuante em jogo (CardTipHost). A casca carrega o `position: fixed` e
+   as coordenadas calculadas no hover; o balão em si volta ao fluxo normal
+   dentro dela, senão o `bottom: calc(100% + 10px)` do placar a jogaria para
+   fora da tela. A seta do `::after` é omitida porque aqui não há um "baixo"
+   fixo para apontar. */
+.card-tip-shell {
+  position: fixed;
+  z-index: 30;
+  width: 272px;
+  pointer-events: none;
+  /* `placeTip` devolve `left` como o centro da âncora; centramos o balão nele
+     para que apareça acima do meio do elemento, não deslocado para um lado. */
+  transform: translateX(-50%);
+}
+
+.card-tip-shell .card-tip {
+  position: static;
+  width: 100%;
+  bottom: auto;
+  left: auto;
+  transform: none;
+}
+
+/* A setinha também aparece no balão flutuante (portal). O `.card-tip` é
+   estático dentro da casca, então o ::after se ancora na casca. Quando o balão
+   fica ACIMA da âncora (padrão), a seta aponta para baixo (centro inferior);
+   quando fica ABAIXO, a seta vira para cima (centro superior). */
+.card-tip-shell .card-tip::after {
+  content: "";
+}
+
+.card-tip-shell[data-placement="below"] .card-tip::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: color-mix(in srgb, var(--tip-accent, #c3e83f) 45%, transparent);
+}
+
+/* Setinha do balão */
+.card-tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  border: 6px solid transparent;
+  border-top-color: color-mix(in srgb, var(--tip-accent, #c3e83f) 45%, transparent);
+  transform: translateX(-50%);
+}
+
+.card-tip-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-tip-head strong {
+  color: #f4f6ff;
+  font: 800 12px/1.2 monospace;
+  letter-spacing: 0.05em;
+}
+
+.card-tip-tier {
+  flex: none;
+  color: var(--tip-accent, #c3e83f);
+  font: 800 9px/1 monospace;
+  letter-spacing: 0.12em;
+}
+
+.card-tip-kind {
+  margin: 5px 0 0;
+  color: #9fb4e0;
+  font: 700 9px/1.3 monospace;
+  letter-spacing: 0.1em;
+}
+
+.card-tip-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.card-tip-chip {
+  padding: 3px 7px;
+  color: #cfd6e4;
+  font: 700 9px/1.2 monospace;
+  background: rgba(150, 170, 220, 0.12);
+  border: 1px solid rgba(150, 170, 220, 0.24);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.card-tip-chip.is-main {
+  color: #0c1118;
+  background: var(--tip-accent, #c3e83f);
+  border-color: var(--tip-accent, #c3e83f);
+}
+
+.card-tip-chip small {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.card-tip-synergy {
+  margin: 8px 0 0;
+  color: #e8d48a;
+  font: 700 10px/1.45 monospace;
+}
+
+.card-tip-desc {
+  margin: 8px 0 0;
+  color: #c4c8d4;
+  font: 12px/1.55 system-ui, sans-serif;
+}
+
+.card-tip-foot {
+  margin: 9px 0 0;
+  color: #7d8aa8;
+  font: 700 8px/1 monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 520px) {
+  .leaderboard-row {
+    grid-template-columns: 34px 1fr 54px;
+  }
+
+  .lb-status {
+    display: none;
+  }
+
+  .leaderboard-row--head .lb-status {
+    display: none;
+  }
+}
+
+/* =========================================================================
+ * Modal de Ajustes (volume) — estilo do menu principal
+ * ========================================================================= */
+.settings-overlay {
+  z-index: 5100;
+}
+
+.settings-panel {
+  position: relative;
+  width: min(100%, 460px);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  color: #eef2fb;
+  font: 800 12px/1 monospace;
+  letter-spacing: 0.18em;
+}
+
+.settings-value {
+  color: #c3e83f;
+  font: 900 14px/1 monospace;
+  letter-spacing: 0.04em;
+}
+
+.settings-field input[type="range"] {
+  width: 100%;
+  height: 6px;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #c3e83f, rgba(150, 170, 220, 0.25));
+  outline: none;
+  cursor: pointer;
+}
+
+.settings-field input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #eef2fb;
+  border: 3px solid #c3e83f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+/* =========================================================================
+ * Editor de VFX (painel de balanceamento)
+ * ========================================================================= */
+
+.vfx-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.vfx-editor-intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #c7d2e8;
+}
+
+.vfx-editor-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.vfx-editor-actions .is-primary {
+  border-color: rgba(150, 110, 255, 0.8);
+  color: #efe6ff;
+}
+
+.vfx-style-card {
+  padding: 16px;
+  background: linear-gradient(160deg, rgba(22, 28, 42, 0.92), rgba(9, 12, 20, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+}
+
+.vfx-style-head h3 {
+  margin: 0 0 12px;
+  font: 800 16px/1.2 monospace;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.vfx-style-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 42%);
+  gap: 18px;
+}
+
+@media (max-width: 760px) {
+  .vfx-style-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vfx-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vfx-color-row,
+.vfx-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vfx-color-row input[type="color"] {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.vfx-color-row input[type="text"].vfx-color-hex {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-transform: uppercase;
+}
+
+.vfx-slider-row input[type="range"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 28px;
+  accent-color: #9a6cff;
+}
+
+.vfx-slider-row input[type="number"].vfx-num {
+  flex: 0 0 74px;
+  width: 74px;
+  text-align: center;
+}
+
+/* Preview ao vivo: carta à esquerda, badge à direita, projétil por cima. */
+.vfx-preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 190px;
+  padding: 16px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(40, 52, 72, 0.5), rgba(6, 9, 16, 0.85) 78%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.vfx-preview-card {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 104px;
+  font: 700 10px/1 monospace;
+  letter-spacing: 0.08em;
+  color: #aeb9d4;
+  background: linear-gradient(160deg, rgba(60, 72, 96, 0.5), rgba(10, 14, 22, 0.8));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+}
+
+.vfx-preview-badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  font: 800 9px/1 monospace;
+  letter-spacing: 0.08em;
+  color: #e7eefc;
+  background: radial-gradient(circle, rgba(70, 86, 120, 0.6), rgba(8, 12, 20, 0.9));
+  border: 2px solid rgba(210, 225, 255, 0.55);
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.vfx-fire {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 4px 12px;
+  font-size: 11px;
+}
+
+/* Formulário "Nova carta" no topo da lista de cartas (painel) */
+.balance-new-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.balance-new-card input {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.balance-new-card-id {
+  flex-basis: 100%;
+  font: 700 10px/1.2 monospace;
+  letter-spacing: 0.04em;
+  color: #9fb4e0;
+}
+
+/* =========================================================================
+ * Peças (WAKIZASHI): carta flutua e o slot pulsa em vermelho brilhante
+ * ========================================================================= */
+
+/* Flutua mantendo o centramento do slot (translate -50%,-53%). */
+@keyframes piece-float {
+  0%, 100% { transform: translate(-50%, -53%); }
+  50% { transform: translate(-50%, -62%); }
+}
+
+.player-slot .hand-card.is-piece,
+.player-slot .hand-card.is-piece:hover {
+  animation: piece-float 2.4s ease-in-out infinite;
+}
+
+/* Slot em vermelho brilhante quando contém uma peça. */
+.player-slot:has(.hand-card.is-piece) {
+  background:
+    linear-gradient(145deg, rgba(220, 40, 40, 0.22), transparent 60%),
+    radial-gradient(ellipse at 50% 46%, rgba(120, 20, 24, 0.5), rgba(10, 4, 6, 0.9) 78%);
+  animation: piece-slot-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes piece-slot-pulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 150, 150, 0.35),
+      inset 0 -12px 20px rgba(0, 0, 0, 0.55),
+      0 0 14px 2px rgba(220, 30, 30, 0.5);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 180, 180, 0.6),
+      inset 0 -12px 20px rgba(0, 0, 0, 0.55),
+      0 0 28px 8px rgba(255, 40, 40, 0.9);
+  }
+}
+
+/* Selo de sangramento na carta-peça. */
+.card-piece-tag {
+  color: #ff6a6a;
+  text-shadow: 0 0 8px rgba(255, 60, 60, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player-slot .hand-card.is-piece,
+  .player-slot .hand-card.is-piece:hover,
+  .player-slot:has(.hand-card.is-piece) {
+    animation: none;
+  }
+}
+
+/* Aba MAGOS do painel: linha por mago com preview (fundo + retrato + áudio). */
+.mages-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mage-row-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 34%);
+  gap: 18px;
+}
+
+@media (max-width: 760px) {
+  .mage-row-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mage-row-preview {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-height: 190px;
+  padding: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+
+.mage-row-audio {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 32px;
+}
+
+/* Recorte do mago no preview da aba MAGOS. */
+.mage-row-cutout {
+  position: relative;
+  z-index: 2;
+  max-height: 160px;
+  max-width: 90%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.6));
+}
+
+/* Recorte do mago saltando acima da badge do jogador no tabuleiro.
+   Seletor específico (img.board-badge-cutout) para vencer `.board-owner-badge img`. */
+.board-owner-badge img.board-badge-cutout {
+  position: absolute;
+  left: 50%;
+  top: -46px;
+  z-index: 1;
+  width: 180px;
+  height: 184px;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateX(-50%);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .board-owner-badge img.board-badge-cutout {
+    width: 96px;
+    height: 100px;
+    top: -26px;
+  }
+}
+
+/* Com recorte sobreposto, a foto de BASE é borrada DENTRO de um quadro: a
+   borda fica no quadro (nítida, com overflow:hidden) e só a foto leva o blur,
+   recortada pela borda. Assim não se veem as duas imagens uma atrás da outra e
+   a borda não borra. */
+
+/* --- Badge do tabuleiro --- */
+.board-owner-badge .board-badge-frame {
+  position: relative;
+  width: 200px;
+  height: 120px;
+  overflow: hidden;
+  border: 4px solid color-mix(in srgb, var(--badge-accent) 72%, white);
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--badge-accent) 34%, transparent),
+    0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+.board-owner-badge .board-badge-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* scale evita bordas transparentes que o blur deixaria nas quinas. */
+  transform: scale(1.12);
+  filter: blur(7px) brightness(0.72) saturate(1.1);
+}
+
+/* --- Perfil do menu --- */
+.home-profile-frame {
+  position: relative;
+  display: block;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border: 4px solid color-mix(in srgb, var(--profile-accent) 72%, white);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--profile-accent) 32%, transparent);
+  transition: transform 120ms ease;
+}
+
+.home-profile-mage-btn:hover .home-profile-frame {
+  transform: translateY(-3px) scale(1.03);
+}
+
+.home-profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.12);
+  filter: blur(7px) brightness(0.72) saturate(1.1);
+}
+
+@media (max-width: 520px) {
+  .board-owner-badge .board-badge-frame {
+    width: 48px;
+    height: 48px;
+    border-width: 3px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+}
+
+/* =========================================================================
+ * Tela de carregamento v2 (logo cinza colorindo)
+ * ========================================================================= */
+.loading-screen-v2 {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  background: #05060a;
+  animation: loading-fade-in 320ms ease both;
+}
+
+.loading-screen-v2.is-leaving {
+  animation: loading-fade-out 420ms ease forwards;
+  pointer-events: none;
+}
+
+.loading-logo {
+  position: relative;
+  width: min(44vw, 340px);
+  filter: drop-shadow(0 12px 40px rgba(0, 0, 0, 0.6));
+}
+
+.loading-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.loading-logo-gray {
+  filter: grayscale(1) brightness(0.45) contrast(0.9);
+}
+
+/* Cópia colorida revelada de baixo para cima, em pulso contínuo. */
+.loading-logo-color {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(0 0 20px rgba(120, 160, 255, 0.55));
+  animation: loading-color-fill 1.9s ease-in-out infinite;
+}
+
+@keyframes loading-color-fill {
+  0% { clip-path: inset(100% 0 0 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(100% 0 0 0); }
+}
+
+.loading-label {
+  font: 700 13px/1.4 monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9fb4e0;
+  animation: loading-label-pulse 1.9s ease-in-out infinite;
+}
+
+@keyframes loading-label-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes loading-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes loading-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-logo-color { animation: none; clip-path: inset(0 0 0 0); }
+  .loading-label { animation: none; opacity: 0.9; }
+}
+
+/* =========================================================================
+ * Tela VS v2 (transição automática entre partidas de player)
+ * ========================================================================= */
+.versus-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 3, 8, 0.86);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  animation: loading-fade-in 360ms ease both;
+}
+
+.versus-screen.is-leaving {
+  animation: loading-fade-out 420ms ease forwards;
+  pointer-events: none;
+}
+
+.versus-screen .versus-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 5vw, 80px); /* mais próximos */
+}
+
+.versus-screen .versus-side {
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.versus-screen .versus-badge {
+  position: relative;
+  display: block;
+  width: clamp(210px, 22vw, 300px);
+  height: clamp(250px, 26vw, 360px);
+}
+
+.versus-screen .versus-badge-img,
+.versus-screen .versus-badge-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  overflow: hidden;
+  border: 5px solid color-mix(in srgb, var(--accent, #fff) 78%, white);
+  border-top-left-radius: 110px;
+  border-top-right-radius: 110px;
+  border-bottom-left-radius: 18px;
+  border-bottom-right-radius: 18px;
+  box-shadow:
+    0 0 34px color-mix(in srgb, var(--accent, #fff) 45%, transparent),
+    0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.versus-screen .versus-badge-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transform: scale(1.12);
+  filter: blur(8px) brightness(0.7) saturate(1.1);
+}
+
+.versus-screen .versus-badge-cutout {
+  position: absolute;
+  left: 50%;
+  top: -16%;
+  z-index: 2;
+  width: 112%;
+  height: 128%;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.65));
+  pointer-events: none;
+}
+
+.versus-screen .versus-name {
+  font: 800 italic clamp(22px, 2.6vw, 40px)/1.1 inherit;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 2px 12px #000;
+}
+
+.versus-screen .versus-vs {
+  font: 900 clamp(34px, 5vw, 72px)/1 inherit;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 14px #000;
+}
+
+/* Resultado (vitória/derrota) — reaproveita a tela VS, badge única centralizada. */
+.battle-outcome-side {
+  gap: 24px;
+}
+
+.battle-outcome-title {
+  font: 900 clamp(40px, 7vw, 92px)/1 inherit;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-shadow: 0 2px 16px #000;
+}
+
+.battle-outcome.is-win .battle-outcome-title {
+  color: #ffd964;
+  filter: drop-shadow(0 0 24px rgba(255, 200, 60, 0.7));
+}
+
+.battle-outcome.is-loss .battle-outcome-title {
+  color: #ff5a5a;
+  filter: drop-shadow(0 0 24px rgba(255, 60, 60, 0.6));
+}
+
+.battle-outcome-sub {
+  font: 700 clamp(11px, 1.3vw, 15px)/1.4 monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c7d2e8;
+  text-align: center;
+}
+
+/* =========================================================================
+   TUTORIAL GUIADO ("APRENDER MAGGI")
+   Sem UI própria: o balão reusa o painel do menu (.fullscreen-prompt-panel) e
+   botões .home-item. As classes abaixo só fazem POSICIONAMENTO/máscara —
+   escurecer a tela e flutuar o painel do menu junto do elemento destacado.
+   ========================================================================= */
+.tutorial-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none; /* só os filhos relevantes capturam ponteiro */
+}
+
+/* Moldura luminosa ao redor do alvo, no verde-limão do menu. Não captura
+   clique: o elemento por baixo recebe o ponteiro normalmente. */
+.tutorial-spotlight {
+  position: fixed;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 2px rgba(195, 232, 63, 0.95),
+    0 0 22px 6px rgba(195, 232, 63, 0.4);
+  animation: tutorial-pulse 1.6s ease-in-out infinite;
+}
+@keyframes tutorial-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(195, 232, 63, 0.9), 0 0 18px 4px rgba(195, 232, 63, 0.3); }
+  50%      { box-shadow: 0 0 0 3px rgba(214, 255, 90, 1),   0 0 30px 10px rgba(195, 232, 63, 0.55); }
+}
+
+/* Só posicionamento: o painel do menu flutua junto do spotlight. */
+.tutorial-panel {
+  position: fixed;
+  width: min(360px, calc(100vw - 32px));
+  pointer-events: auto;
+  margin: 0;
+}
+
+.tutorial-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  color: #d6ff5a;
+  font: 800 11px/1.3 monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.tutorial-hint-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d6ff5a;
+  box-shadow: 0 0 10px 2px rgba(214, 255, 90, 0.8);
+  animation: tutorial-pulse-dot 1.1s ease-in-out infinite;
+}
+@keyframes tutorial-pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
 }
